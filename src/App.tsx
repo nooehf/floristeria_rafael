@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Flower2, Menu, X, Instagram, Facebook, Phone } from 'lucide-react';
 import { useState, useEffect } from 'react';

@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ClipboardCheck, ArrowLeft, Plus, Check, Star } from 'lucide-react';
+import { ClipboardCheck, ArrowLeft, Check, Star } from 'lucide-react';
 import { PRODUCTS } from '../data/products';
 
 const ProductDetail = () => {
