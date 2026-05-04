@@ -1,140 +1,82 @@
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, Instagram, Facebook, Twitter } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, ArrowRight } from 'lucide-react';
 
 const Contact = () => {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert('Mensaje enviado (simulado)');
-  };
-
   return (
-    <div className="section">
-      <div className="container">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Contacta con Nosotros</h1>
-          <p className="text-text-muted max-w-2xl mx-auto">
-            Estamos aquí para ayudarte. Ya sea para un pedido especial, una duda o un evento, 
-            no dudes en escribirnos. Te responderemos lo antes posible.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-12">
-          {/* Info Side */}
-          <motion.div 
+    <div className="pt-32 pb-24 bg-white">
+      <div className="container mx-auto px-6">
+        <div className="grid lg:grid-cols-2 gap-24 items-start">
+          
+          {/* Text Side */}
+          <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="space-y-8"
           >
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-fuchsia-50">
-              <h2 className="text-2xl font-bold mb-8">Información de contacto</h2>
-              
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-fuchsia-100 text-fuchsia-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <MapPin size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-bold">Nuestra Tienda</h4>
-                    <p className="text-text-muted">Calle de las Flores, 123, 28001 Madrid</p>
-                  </div>
-                </div>
+            <h1 className="text-6xl font-display font-bold text-secondary mb-8">Hablemos de <br /><span className="text-primary italic font-light">Flores</span>.</h1>
+            <p className="text-xl text-gray-500 mb-16 max-w-md leading-relaxed">
+              Estamos aquí para ayudarte a elegir el regalo perfecto o diseñar la decoración de tu próximo gran evento.
+            </p>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-pink-100 text-pink-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Phone size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-bold">Teléfono</h4>
-                    <p className="text-text-muted">+34 912 345 678</p>
-                  </div>
+            <div className="space-y-12">
+              <div className="flex items-start gap-6">
+                <div className="w-14 h-14 bg-pastel-mint rounded-2xl flex items-center justify-center text-primary flex-shrink-0">
+                  <MapPin size={24} />
                 </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-rose-100 text-rose-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Mail size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-bold">Email</h4>
-                    <p className="text-text-muted">hola@floristeriarafael.com</p>
-                  </div>
+                <div>
+                  <h4 className="text-xl font-bold mb-2">Visítanos</h4>
+                  <p className="text-gray-500">Calle de las Flores, 123<br />28001 Madrid, España</p>
                 </div>
               </div>
 
-              <div className="mt-12">
-                <h4 className="font-bold mb-4">Síguenos</h4>
-                <div className="flex gap-4">
-                  <a href="#" className="w-10 h-10 bg-gray-50 text-gray-400 hover:text-fuchsia-600 hover:bg-fuchsia-50 rounded-full flex items-center justify-center transition-all">
-                    <Instagram size={20} />
-                  </a>
-                  <a href="#" className="w-10 h-10 bg-gray-50 text-gray-400 hover:text-fuchsia-600 hover:bg-fuchsia-50 rounded-full flex items-center justify-center transition-all">
-                    <Facebook size={20} />
-                  </a>
-                  <a href="#" className="w-10 h-10 bg-gray-50 text-gray-400 hover:text-fuchsia-600 hover:bg-fuchsia-50 rounded-full flex items-center justify-center transition-all">
-                    <Twitter size={20} />
-                  </a>
+              <div className="flex items-start gap-6">
+                <div className="w-14 h-14 bg-pastel-mint rounded-2xl flex items-center justify-center text-primary flex-shrink-0">
+                  <Phone size={24} />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold mb-2">Llámanos</h4>
+                  <p className="text-gray-500">+34 912 345 678<br />Atención personalizada</p>
                 </div>
               </div>
-            </div>
 
-            {/* Map Placeholder */}
-            <div className="h-64 bg-gray-200 rounded-3xl overflow-hidden relative">
-              <div className="absolute inset-0 flex items-center justify-center bg-fuchsia-50">
-                <p className="text-fuchsia-400 font-medium">Mapa Interactivo próximamente</p>
+              <div className="flex items-start gap-6">
+                <div className="w-14 h-14 bg-pastel-mint rounded-2xl flex items-center justify-center text-primary flex-shrink-0">
+                  <Mail size={24} />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold mb-2">Email</h4>
+                  <p className="text-gray-500">hola@floristeriarafael.com<br />Respuesta en menos de 24h</p>
+                </div>
               </div>
             </div>
           </motion.div>
 
           {/* Form Side */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white p-8 rounded-3xl shadow-lg border border-fuchsia-50"
+            className="bg-white p-12 rounded-[3rem] shadow-2xl border border-gray-50"
           >
-            <h2 className="text-2xl font-bold mb-8">Envíanos un mensaje</h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-600 ml-1">Nombre</label>
-                  <input 
-                    type="text" 
-                    placeholder="Tu nombre"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 transition-all"
-                    required
-                  />
+            <form className="space-y-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-3">
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400 ml-1">Nombre</label>
+                  <input type="text" placeholder="Ej. Ana García" className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary-light transition-all" />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-600 ml-1">Email</label>
-                  <input 
-                    type="email" 
-                    placeholder="tu@email.com"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 transition-all"
-                    required
-                  />
+                <div className="space-y-3">
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400 ml-1">Email</label>
+                  <input type="email" placeholder="ana@ejemplo.com" className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary-light transition-all" />
                 </div>
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-600 ml-1">Asunto</label>
-                <input 
-                  type="text" 
-                  placeholder="¿En qué podemos ayudarte?"
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 transition-all"
-                  required
-                />
+              <div className="space-y-3">
+                <label className="text-xs font-bold uppercase tracking-widest text-gray-400 ml-1">Mensaje</label>
+                <textarea rows={5} placeholder="Cuéntanos qué necesitas..." className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary-light transition-all resize-none" />
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-600 ml-1">Mensaje</label>
-                <textarea 
-                  rows={4} 
-                  placeholder="Escribe tu mensaje aquí..."
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 transition-all resize-none"
-                  required
-                ></textarea>
-              </div>
-              <button type="submit" className="btn btn-primary w-full py-4 flex gap-2">
-                <Send size={18} /> Enviar Mensaje
+              <button className="w-full bg-secondary text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-black transition-all group">
+                Enviar mensaje <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </button>
             </form>
           </motion.div>
+
         </div>
       </div>
     </div>
