@@ -1,10 +1,11 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Flower2, ShoppingBag, Calendar, Mail, Menu, X, Instagram, Facebook, Phone } from 'lucide-react';
+import { Flower2, Menu, X, Instagram, Facebook, Phone } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import Home from './pages/Home';
-import Catalog from './pages/Catalog';
-import Events from './pages/Events';
-import Contact from './pages/Contact';
+import Home from './pages/Home.tsx';
+import Catalog from './pages/Catalog.tsx';
+import Events from './pages/Events.tsx';
+import Contact from './pages/Contact.tsx';
+import ProductDetail from './pages/ProductDetail.tsx';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -71,6 +72,7 @@ function App() {
             <Route path="/catalogo" element={<Catalog />} />
             <Route path="/eventos" element={<Events />} />
             <Route path="/contacto" element={<Contact />} />
+            <Route path="/producto/:id" element={<ProductDetail />} />
           </Routes>
         </main>
 

@@ -1,8 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  --color-primary: #1a4d2e;
+  --color-primary-light: #e8f5e9;
+  --color-secondary: #18181b;
+  --color-pastel: #f0fdf4;
+  --color-pastel-mint: #e8f5e9;
+  
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+}
 
 @layer base {
   body {
@@ -20,28 +27,8 @@
   .btn-primary {
     @apply bg-secondary text-white shadow-xl hover:shadow-2xl hover:bg-black;
   }
-  .btn-outline {
-    @apply border-2 border-secondary text-secondary hover:bg-secondary hover:text-white;
-  }
-  .glass-nav {
-    @apply sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100;
-  }
-  .section-padding {
-    @apply py-24 px-6 md:px-12;
-  }
-  .card-premium {
-    @apply bg-white rounded-[2rem] p-8 border border-gray-100 shadow-sm transition-all duration-500 hover:shadow-2xl hover:border-primary-light;
-  }
 }
 
-/* Custom Utilities to fix the Hero and other bits */
 .hero-gradient {
   background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.4) 100%);
 }
-
-.text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-secondary to-primary;
-}
-
-.bg-pastel-green { background-color: #f0fdf4; }
-.bg-pastel-mint { background-color: #e8f5e9; }
