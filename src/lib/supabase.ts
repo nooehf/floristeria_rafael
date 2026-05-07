@@ -31,6 +31,7 @@ export interface Product {
   min_custom_price?: number;
   max_custom_price?: number;
   images?: string[];
+  selling_mode?: 'budget' | 'quantity';
   created_at?: string;
 }
 

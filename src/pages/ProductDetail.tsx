@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Check, Star, ShoppingBag } from 'lucide-react';
+import { ArrowLeft, Check, ShoppingBag } from 'lucide-react';
 import { supabase, type Product } from '../lib/supabase';
 import { useCart } from '../context/CartContext';
 
@@ -13,14 +13,22 @@ const ProductDetail = () => {
   const [activeImage, setActiveImage] = useState<string>('');
   const [selectedOption, setSelectedOption] = useState<number | 'custom' | null>(null);
   const [customPrice, setCustomPrice] = useState<string>('');
+  const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
 
-  const getFinalPrice = () => {
-    if (selectedOption === 'custom') return parseFloat(customPrice) || 0;
-    if (selectedOption !== null && product?.price_options?.[selectedOption as number]) {
-      return product.price_options[selectedOption as number].price;
+  useEffect(() => {
+    if (product && product.selling_mode === 'quantity' && product.min_custom_price) {
+      setQuantity(Math.max(1, product.min_custom_price));
     }
-    return product?.price || 0;
+  }, [product]);
+
+  const getFinalPrice = () => {
+    let basePrice = product?.price || 0;
+    if (selectedOption === 'custom') return (parseFloat(customPrice) || 0) * (product?.selling_mode === 'quantity' ? quantity : 1);
+    if (selectedOption !== null && product?.price_options?.[selectedOption as number]) {
+      basePrice = product.price_options[selectedOption as number].price;
+    }
+    return basePrice * (product?.selling_mode === 'quantity' ? quantity : 1);
   };
 
   const getFinalLabel = () => {
@@ -43,7 +51,12 @@ const ProductDetail = () => {
   const handleAdd = () => {
     if (product && isPriceValid()) {
       const price = getFinalPrice();
-      addToCart(product, price, getFinalLabel());
+      const label = getFinalLabel();
+      const finalLabel = product.selling_mode === 'quantity' 
+        ? `${quantity}x ${label}` 
+        : label;
+      
+      addToCart(product, price, finalLabel);
       setAdded(true);
       setTimeout(() => setAdded(false), 2000);
     }
@@ -53,7 +66,8 @@ const ProductDetail = () => {
     if (product && isPriceValid()) {
       const price = getFinalPrice();
       const label = getFinalLabel();
-      const text = `¡Hola! Me gustaría encargar este producto directamente:\n\n- 1x ${product.name} ${label ? `(${label})` : ''} - ${price.toFixed(2)}€\n\n*Total estimado: ${price.toFixed(2)}€*`;
+      const unitText = product.selling_mode === 'quantity' ? `${quantity}x ` : '';
+      const text = `¡Hola! Me gustaría encargar este producto directamente:\n\n- ${unitText}${product.name} ${label ? `(${label})` : ''} - ${price.toFixed(2)}€\n\n*Total estimado: ${price.toFixed(2)}€*`;
       const encodedText = encodeURIComponent(text);
       window.open(`https://wa.me/34600000000?text=${encodedText}`, '_blank');
     }
@@ -94,20 +108,20 @@ const ProductDetail = () => {
     <div className="pt-32 md:pt-40 pb-24 bg-white">
       <div className="container mx-auto px-0 md:px-6">
         <div className="px-6 md:px-0">
-          <Link to="/catalogo" className="inline-flex items-center gap-2 text-gray-400 hover:text-secondary mb-8 transition-colors">
-            <ArrowLeft size={20} /> Volver al catálogo
+          <Link to="/catalogo" className="inline-flex items-center gap-2 text-gray-400 hover:text-secondary mb-4 md:mb-8 transition-colors text-xs md:text-base">
+            <ArrowLeft size={16} className="md:w-5 md:h-5" /> Volver al catálogo
           </Link>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-16 items-start">
           {/* Image Gallery */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-6"
+            className="space-y-2 md:space-y-6"
           >
-            <div className="relative">
-              <div className="aspect-square md:aspect-[4/5] overflow-hidden md:rounded-[3rem] bg-gray-50 md:shadow-2xl relative">
+            <div className="relative px-8 md:px-0">
+              <div className="aspect-square md:aspect-[4/5] overflow-hidden rounded-[2rem] md:rounded-[3rem] bg-gray-50 md:shadow-2xl relative">
                 <AnimatePresence mode="wait">
                   <motion.img 
                     key={activeImage}
@@ -166,19 +180,18 @@ const ProductDetail = () => {
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="px-6 md:px-0 py-6"
+            className="px-6 md:px-0 py-0 md:py-6"
           >
-            <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest mb-6">
-              <Star size={14} fill="currentColor" /> Producto Destacado
-            </div>
-            <h1 className="text-5xl md:text-6xl font-display font-bold text-secondary mb-6">{product.name}</h1>
-            <div className="text-4xl font-bold text-secondary mb-10">
-              {getFinalPrice() > 0 ? `${getFinalPrice().toFixed(2)}€` : `${Number(product.price).toFixed(0)}€`}
+            <h1 className="text-2xl md:text-6xl font-display font-bold text-secondary mb-1 md:mb-6">{product.name}</h1>
+            <div className="text-2xl md:text-4xl font-bold text-secondary mb-4 md:mb-10">
+              {product.selling_mode === 'quantity' ? '' : (product.allow_custom_price || (product.price_options?.length || 0) > 0 ? 'Desde ' : '')}
+              {Number(product.price).toFixed(2)}€
+              {product.selling_mode === 'quantity' && <span className="text-sm md:text-lg text-gray-400 font-normal ml-1">/ unidad</span>}
             </div>
 
             {/* Price Selection */}
-            {(product.price_options && product.price_options.length > 0 || product.allow_custom_price) && (
-              <div className="mb-10 space-y-6 pt-10 border-t border-gray-100">
+            {((product.price_options && product.price_options.length > 0) || (product.allow_custom_price && product.selling_mode !== 'quantity')) && (
+              <div className="mb-8 md:mb-10 space-y-4 md:space-y-6 pt-8 md:pt-10 border-t border-gray-100">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-bold text-secondary uppercase tracking-widest">Selecciona el tamaño</h3>
                 </div>
@@ -211,7 +224,7 @@ const ProductDetail = () => {
                     </button>
                   ))}
                   
-                  {product.allow_custom_price && (
+                  {product.allow_custom_price && product.selling_mode !== 'quantity' && (
                     <button
                       onClick={() => setSelectedOption('custom')}
                       className={`flex-shrink-0 w-32 p-4 rounded-2xl border-2 text-center transition-all ${
@@ -226,7 +239,7 @@ const ProductDetail = () => {
                   )}
                 </div>
                 
-                {selectedOption === 'custom' && (
+                {selectedOption === 'custom' && product.selling_mode !== 'quantity' && (
                   <motion.div 
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -267,8 +280,42 @@ const ProductDetail = () => {
                 )}
               </div>
             )}
+
+            {product.selling_mode === 'quantity' && (
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-8 md:mb-10 pt-8 md:pt-10 border-t border-gray-100 flex items-center justify-between"
+              >
+                <div>
+                  <h3 className="text-xs md:text-sm font-bold text-secondary uppercase tracking-widest">Cantidad</h3>
+                  <p className="hidden md:block text-xs text-gray-500">Añade más unidades</p>
+                </div>
+                <div className="flex items-center gap-4 md:gap-6">
+                  <div className="text-right">
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total</p>
+                    <p className="text-xl md:text-2xl font-bold text-secondary">{getFinalPrice().toFixed(2)}€</p>
+                  </div>
+                  <div className="flex items-center gap-2 md:gap-4 bg-gray-50 p-1.5 md:p-2 rounded-xl md:rounded-2xl border border-gray-200">
+                    <button 
+                      onClick={() => setQuantity(Math.max(product.min_custom_price || 1, quantity - 1))}
+                      className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-white flex items-center justify-center text-secondary hover:bg-secondary hover:text-white transition-all shadow-sm active:scale-90 text-sm md:text-base"
+                    >
+                      -
+                    </button>
+                    <span className="text-base md:text-lg font-bold w-5 md:w-6 text-center">{quantity}</span>
+                    <button 
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-white flex items-center justify-center text-secondary hover:bg-secondary hover:text-white transition-all shadow-sm active:scale-90 text-sm md:text-base"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
             
-            <p className="text-xl text-gray-500 leading-relaxed mb-12">
+            <p className="text-base md:text-xl text-gray-500 leading-relaxed mb-8 md:mb-12">
               {product.description} Nuestra selección premium garantiza que cada flor llegue en su punto óptimo de frescura y belleza.
             </p>
 

@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { supabase, type Product, type Category } from '../lib/supabase';
 
-const emptyProduct = { name: '', description: '', price: 0, price_label: 'Estándar', image: '', images: [], category_id: undefined, price_options: [], allow_custom_price: false, min_custom_price: undefined, max_custom_price: undefined };
+const emptyProduct = { name: '', description: '', price: 0, price_label: 'Estándar', image: '', images: [], category_id: undefined, price_options: [], allow_custom_price: false, min_custom_price: undefined, max_custom_price: undefined, selling_mode: 'budget' as const };
 const emptyCategory = { name: '', slug: '' };
 
 const AdminDashboard = () => {
@@ -159,6 +159,7 @@ const AdminDashboard = () => {
           price_label: editingProduct.price_label || 'Estándar',
           image: editingProduct.image,
           images: editingProduct.images || [],
+          selling_mode: editingProduct.selling_mode || 'budget',
           category_id: editingProduct.category_id,
           price_options: editingProduct.price_options || [],
           allow_custom_price: editingProduct.allow_custom_price || false,
@@ -190,6 +191,7 @@ const AdminDashboard = () => {
           price_label: editingProduct.price_label || 'Estándar',
           image: editingProduct.image,
           images: editingProduct.images || [],
+          selling_mode: editingProduct.selling_mode || 'budget',
           category_id: editingProduct.category_id,
           price_options: editingProduct.price_options || [],
           allow_custom_price: editingProduct.allow_custom_price || false,
@@ -613,8 +615,33 @@ const AdminDashboard = () => {
 
                 {/* Price Options Section */}
                 <div className="pt-6 border-t border-gray-100 space-y-6">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-bold text-secondary uppercase tracking-widest">Modo de venta</p>
+                      <p className="text-xs text-gray-500">¿Cómo se calcula el precio final?</p>
+                    </div>
+                    <div className="flex bg-white p-1 rounded-lg border border-gray-200">
+                      <button
+                        type="button"
+                        onClick={() => setEditingProduct({ ...editingProduct, selling_mode: 'budget' })}
+                        className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${editingProduct.selling_mode === 'budget' || !editingProduct.selling_mode ? 'bg-secondary text-white shadow-md' : 'text-gray-400 hover:text-secondary'}`}
+                      >
+                        Presupuesto
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setEditingProduct({ ...editingProduct, selling_mode: 'quantity' })}
+                        className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${editingProduct.selling_mode === 'quantity' ? 'bg-secondary text-white shadow-md' : 'text-gray-400 hover:text-secondary'}`}
+                      >
+                        Unidades/Pack
+                      </button>
+                    </div>
+                  </div>
+
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-bold text-secondary uppercase tracking-widest">Configuración de Precios</h3>
+                    <h3 className="text-sm font-bold text-secondary uppercase tracking-widest">
+                      {editingProduct.selling_mode === 'quantity' ? 'Configuración de Unidades' : 'Configuración de Precios'}
+                    </h3>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -714,8 +741,14 @@ const AdminDashboard = () => {
                   {/* Custom Price Toggle */}
                   <div className="flex items-center justify-between bg-pastel-mint/30 p-4 rounded-xl border border-primary-light">
                     <div className="space-y-0.5">
-                      <p className="text-sm font-bold text-secondary">Presupuesto Personalizado</p>
-                      <p className="text-xs text-gray-500">Permitir que el cliente proponga un precio</p>
+                      <p className="text-sm font-bold text-secondary">
+                        {editingProduct.selling_mode === 'quantity' ? 'Permitir Selección de Cantidad' : 'Presupuesto Personalizado'}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {editingProduct.selling_mode === 'quantity' 
+                          ? 'El cliente podrá elegir cuántas unidades quiere' 
+                          : 'Permitir que el cliente proponga un precio'}
+                      </p>
                     </div>
                     <button
                       type="button"
@@ -729,28 +762,32 @@ const AdminDashboard = () => {
                   {editingProduct.allow_custom_price && (
                     <div className="grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-2">
                       <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-gray-400 uppercase">Mínimo (€)</label>
+                        <label className="text-xs font-bold text-gray-400 uppercase">
+                          {editingProduct.selling_mode === 'quantity' ? 'Mínimo Unidades' : 'Mínimo (€)'}
+                        </label>
                         <input
                           type="number"
-                          step="0.01"
+                          step={editingProduct.selling_mode === 'quantity' ? "1" : "0.01"}
                           value={editingProduct.min_custom_price || ''}
                           onChange={(e) => setEditingProduct({ ...editingProduct, min_custom_price: e.target.value === '' ? 0 : parseFloat(e.target.value) })}
                           onWheel={(e) => (e.target as HTMLInputElement).blur()}
                           onFocus={(e) => e.target.select()}
-                          placeholder="Sin mínimo"
+                          placeholder={editingProduct.selling_mode === 'quantity' ? "1" : "Sin mínimo"}
                           className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary"
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-gray-400 uppercase">Máximo (€)</label>
+                        <label className="text-xs font-bold text-gray-400 uppercase">
+                          {editingProduct.selling_mode === 'quantity' ? 'Máximo Unidades' : 'Máximo (€)'}
+                        </label>
                         <input
                           type="number"
-                          step="0.01"
+                          step={editingProduct.selling_mode === 'quantity' ? "1" : "0.01"}
                           value={editingProduct.max_custom_price || ''}
                           onChange={(e) => setEditingProduct({ ...editingProduct, max_custom_price: e.target.value === '' ? 0 : parseFloat(e.target.value) })}
                           onWheel={(e) => (e.target as HTMLInputElement).blur()}
                           onFocus={(e) => e.target.select()}
-                          placeholder="Sin máximo"
+                          placeholder={editingProduct.selling_mode === 'quantity' ? "Ej: 100" : "Sin máximo"}
                           className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary"
                         />
                       </div>
