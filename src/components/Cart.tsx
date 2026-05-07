@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Minus, Plus, ShoppingBag, Send } from 'lucide-react';
 import { useCart } from '../context/CartContext';
@@ -9,9 +10,19 @@ interface CartProps {
 
 const Cart = ({ isOpen, onClose }: CartProps) => {
   const { items, removeFromCart, updateQuantity, totalPrice } = useCart();
+  const [customerName, setCustomerName] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<'efectivo' | 'tarjeta' | ''>('');
+  const [pickupDay, setPickupDay] = useState('');
+
+  const isFormValid = customerName.trim() !== '' && paymentMethod !== '' && pickupDay !== '';
 
   const handleWhatsAppCheckout = () => {
-    const text = `¡Hola! Me gustaría hacer el siguiente encargo:\n\n${items.map(item => `- ${item.quantity}x ${item.name} ${item.selectedLabel ? `(${item.selectedLabel})` : ''} - ${(item.selectedPrice !== undefined ? item.selectedPrice * item.quantity : item.price * item.quantity).toFixed(2)}€`).join('\n')}\n\n*Total estimado: ${totalPrice.toFixed(2)}€*`;
+    if (!isFormValid) return;
+
+    const paymentText = paymentMethod === 'efectivo' ? 'Efectivo' : 'Tarjeta';
+    const itemsList = items.map(item => `- ${item.quantity}x ${item.name} ${item.selectedLabel ? `(${item.selectedLabel})` : ''} - ${(item.selectedPrice !== undefined ? item.selectedPrice * item.quantity : item.price * item.quantity).toFixed(2)}€`).join('\n');
+    
+    const text = `¡Hola! Me gustaría hacer el siguiente encargo:\n\n*DATOS DEL CLIENTE:*\n- Nombre: ${customerName}\n- Día de recogida: ${pickupDay}\n- Método de pago: ${paymentText}\n\n*PEDIDO:*\n${itemsList}\n\n*Total estimado: ${totalPrice.toFixed(2)}€*`;
     const encodedText = encodeURIComponent(text);
     window.open(`https://wa.me/34600000000?text=${encodedText}`, '_blank');
   };
@@ -100,21 +111,63 @@ const Cart = ({ isOpen, onClose }: CartProps) => {
 
             {/* Footer */}
             {items.length > 0 && (
-              <div className="border-t border-gray-100 p-6 bg-gray-50/50">
-                <div className="flex justify-between items-center mb-6">
+              <div className="border-t border-gray-100 p-6 bg-gray-50/50 space-y-4">
+                <div className="space-y-4 mb-4">
+                  <h3 className="font-bold text-secondary text-sm uppercase tracking-widest">Datos del encargo</h3>
+                  
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-gray-400 uppercase">Nombre Completo</label>
+                    <input 
+                      type="text" 
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                      placeholder="Tu nombre y apellidos"
+                      className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-gray-400 uppercase">Día de recogida</label>
+                      <input 
+                        type="date" 
+                        value={pickupDay}
+                        onChange={(e) => setPickupDay(e.target.value)}
+                        className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-gray-400 uppercase">Pago en tienda</label>
+                      <select 
+                        value={paymentMethod}
+                        onChange={(e) => setPaymentMethod(e.target.value as 'efectivo' | 'tarjeta')}
+                        className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary appearance-none"
+                      >
+                        <option value="" disabled>Seleccionar...</option>
+                        <option value="efectivo">Efectivo</option>
+                        <option value="tarjeta">Tarjeta</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center pt-2 border-t border-gray-200">
                   <span className="text-gray-500 font-medium">Total estimado</span>
                   <span className="text-2xl font-bold text-secondary">{totalPrice.toFixed(2)}€</span>
                 </div>
+                
                 <button 
                   onClick={handleWhatsAppCheckout}
-                  className="w-full bg-[#25D366] text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-[#1EBE5D] transition-all hover:scale-[1.02] shadow-xl shadow-[#25D366]/20"
+                  disabled={!isFormValid}
+                  className={`w-full py-4 rounded-xl font-bold flex items-center justify-center gap-3 transition-all shadow-xl ${
+                    isFormValid 
+                      ? 'bg-[#25D366] text-white hover:bg-[#1EBE5D] hover:scale-[1.02] shadow-[#25D366]/20' 
+                      : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-transparent'
+                  }`}
                 >
                   <Send size={18} />
                   Enviar encargo por WhatsApp
                 </button>
-                <p className="text-center text-xs text-gray-400 mt-4">
-                  El pago se acordará directamente por WhatsApp
-                </p>
               </div>
             )}
           </motion.div>

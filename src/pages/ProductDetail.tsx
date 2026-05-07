@@ -14,7 +14,7 @@ const ProductDetail = () => {
   const [selectedOption, setSelectedOption] = useState<number | 'custom' | null>(null);
   const [customPrice, setCustomPrice] = useState<string>('');
   const [quantity, setQuantity] = useState(1);
-  const { addToCart } = useCart();
+  const { addToCart, setIsCartOpen } = useCart();
 
   useEffect(() => {
     if (product && product.selling_mode === 'quantity' && product.min_custom_price) {
@@ -66,10 +66,12 @@ const ProductDetail = () => {
     if (product && isPriceValid()) {
       const price = getFinalPrice();
       const label = getFinalLabel();
-      const unitText = product.selling_mode === 'quantity' ? `${quantity}x ` : '';
-      const text = `¡Hola! Me gustaría encargar este producto directamente:\n\n- ${unitText}${product.name} ${label ? `(${label})` : ''} - ${price.toFixed(2)}€\n\n*Total estimado: ${price.toFixed(2)}€*`;
-      const encodedText = encodeURIComponent(text);
-      window.open(`https://wa.me/34600000000?text=${encodedText}`, '_blank');
+      const finalLabel = product.selling_mode === 'quantity' 
+        ? `${quantity}x ${label}` 
+        : label;
+      
+      addToCart(product, price, finalLabel);
+      setIsCartOpen(true);
     }
   };
 
