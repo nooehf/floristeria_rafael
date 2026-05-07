@@ -1,12 +1,16 @@
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flower2, Menu, X, Instagram, Facebook, Phone } from 'lucide-react';
+import { Flower2, Menu, X, Instagram, Facebook, Phone, ShoppingBag } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useCart } from './context/CartContext';
+import Cart from './components/Cart.tsx';
 import Home from './pages/Home.tsx';
 import Catalog from './pages/Catalog.tsx';
 import Events from './pages/Events.tsx';
 import Contact from './pages/Contact.tsx';
 import ProductDetail from './pages/ProductDetail.tsx';
+import AdminLogin from './pages/AdminLogin.tsx';
+import AdminDashboard from './pages/AdminDashboard.tsx';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -18,9 +22,12 @@ function ScrollToTop() {
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hoveredPath, setHoveredPath] = useState<string | null>(null);
   const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
+  const { totalItems } = useCart();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -32,7 +39,7 @@ function App() {
     <div className="min-h-screen flex flex-col bg-white">
         <ScrollToTop />
         {/* Navigation */}
-        <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled || isMenuOpen ? 'bg-white shadow-sm py-4' : 'bg-transparent py-6'}`}>
+        {!isAdmin && <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled || isMenuOpen ? 'bg-white shadow-sm py-4' : 'bg-transparent py-6'}`}>
           <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
             <Link to="/" className="flex items-center gap-3 group">
               <div className="bg-secondary p-2.5 rounded-2xl text-white group-hover:rotate-12 transition-transform duration-300">
@@ -48,39 +55,66 @@ function App() {
               </div>
             </Link>
 
-            {/* Desktop Menu */}
-            <div className="hidden md:flex gap-2 items-center bg-gray-50/50 p-1.5 rounded-full border border-gray-100">
-              {[
-                { name: 'Inicio', path: '/' },
-                { name: 'Catálogo', path: '/catalogo' },
-                { name: 'Eventos', path: '/eventos' },
-                { name: 'Contacto', path: '/contacto' }
-              ].map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  onMouseEnter={() => setHoveredPath(link.path)}
-                  onMouseLeave={() => setHoveredPath(null)}
-                  className={`relative px-6 py-2.5 text-sm font-bold transition-colors duration-300 z-10 ${
-                    (hoveredPath ? hoveredPath === link.path : location.pathname === link.path) ? 'text-white' : 'text-secondary'
-                  }`}
-                >
-                  {link.name}
-                  {(location.pathname === link.path || hoveredPath === link.path) && (
-                    <motion.div
-                      layoutId="nav-pill"
-                      className="absolute inset-0 bg-secondary rounded-full -z-10"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
-                </Link>
-              ))}
+            {/* Desktop Menu & Cart */}
+            <div className="hidden md:flex items-center gap-6">
+              <div className="flex gap-2 items-center bg-gray-50/50 p-1.5 rounded-full border border-gray-100">
+                {[
+                  { name: 'Inicio', path: '/' },
+                  { name: 'Catálogo', path: '/catalogo' },
+                  { name: 'Eventos', path: '/eventos' },
+                  { name: 'Contacto', path: '/contacto' }
+                ].map((link) => (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    onMouseEnter={() => setHoveredPath(link.path)}
+                    onMouseLeave={() => setHoveredPath(null)}
+                    className={`relative px-6 py-2.5 text-sm font-bold transition-colors duration-300 z-10 ${
+                      (hoveredPath ? hoveredPath === link.path : location.pathname === link.path) ? 'text-white' : 'text-secondary'
+                    }`}
+                  >
+                    {link.name}
+                    {(location.pathname === link.path || hoveredPath === link.path) && (
+                      <motion.div
+                        layoutId="nav-pill"
+                        className="absolute inset-0 bg-secondary rounded-full -z-10"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                  </Link>
+                ))}
+              </div>
+              
+              <button 
+                onClick={() => setIsCartOpen(true)}
+                className="relative p-2 text-secondary hover:text-primary transition-colors"
+              >
+                <ShoppingBag size={24} />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
             </div>
 
-            {/* Mobile Toggle */}
-            <button className="md:hidden text-secondary" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
+            {/* Mobile Toggle & Cart */}
+            <div className="md:hidden flex items-center gap-4">
+              <button 
+                onClick={() => setIsCartOpen(true)}
+                className="relative p-2 text-secondary"
+              >
+                <ShoppingBag size={24} />
+                {totalItems > 0 && (
+                  <span className="absolute 0 right-0 bg-primary text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
+              <button className="text-secondary" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+              </button>
+            </div>
           </div>
 
           {/* Mobile Menu Dropdown */}
@@ -126,7 +160,7 @@ function App() {
               </motion.div>
             )}
           </AnimatePresence>
-        </nav>
+        </nav>}
 
         <main className="flex-grow">
           <Routes>
@@ -135,11 +169,13 @@ function App() {
             <Route path="/eventos" element={<Events />} />
             <Route path="/contacto" element={<Contact />} />
             <Route path="/producto/:id" element={<ProductDetail />} />
+            <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
           </Routes>
         </main>
 
         {/* Footer - Elegant Black & White */}
-        <footer className="bg-secondary text-white pt-24 pb-12">
+        {!isAdmin && <footer className="bg-secondary text-white pt-24 pb-12">
           <div className="max-w-7xl mx-auto px-6">
             <div className="grid md:grid-cols-4 gap-12 mb-16">
               <div className="col-span-2">
@@ -191,8 +227,9 @@ function App() {
               </div>
             </div>
           </div>
-        </footer>
+        </footer>}
         {/* Floating WhatsApp Button */}
+        {!isAdmin &&
         <a 
           href="https://wa.me/34600000000" 
           target="_blank" 
@@ -210,8 +247,9 @@ function App() {
               </svg>
             </div>
           </div>
-        </a>
-      </div>
+        </a>}
+      <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+    </div>
   );
 }
 

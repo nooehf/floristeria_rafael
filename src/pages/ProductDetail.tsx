@@ -1,11 +1,76 @@
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ClipboardCheck, ArrowLeft, Check, Star } from 'lucide-react';
-import { PRODUCTS } from '../data/products';
+import { ArrowLeft, Check, Star, ShoppingBag } from 'lucide-react';
+import { supabase, type Product } from '../lib/supabase';
+import { useCart } from '../context/CartContext';
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const product = PRODUCTS.find(p => p.id === Number(id));
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [added, setAdded] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<number | 'custom' | null>(null);
+  const [customPrice, setCustomPrice] = useState<string>('');
+  const { addToCart } = useCart();
+
+  const getFinalPrice = () => {
+    if (selectedOption === 'custom') return parseFloat(customPrice) || 0;
+    if (selectedOption !== null && product?.price_options?.[selectedOption as number]) {
+      return product.price_options[selectedOption as number].price;
+    }
+    return product?.price || 0;
+  };
+
+  const getFinalLabel = () => {
+    if (selectedOption === 'custom') return 'Precio Personalizado';
+    if (selectedOption !== null && product?.price_options?.[selectedOption as number]) {
+      return product.price_options[selectedOption as number].label;
+    }
+    return '';
+  };
+
+  const handleAdd = () => {
+    if (product) {
+      const price = getFinalPrice();
+      if (price <= 0) return;
+      addToCart(product, price, getFinalLabel());
+      setAdded(true);
+      setTimeout(() => setAdded(false), 2000);
+    }
+  };
+
+  const handleBuyNow = () => {
+    if (product) {
+      const price = getFinalPrice();
+      if (price <= 0) return;
+      const label = getFinalLabel();
+      const text = `¡Hola! Me gustaría encargar este producto directamente:\n\n- 1x ${product.name} ${label ? `(${label})` : ''} - ${price.toFixed(2)}€\n\n*Total estimado: ${price.toFixed(2)}€*`;
+      const encodedText = encodeURIComponent(text);
+      window.open(`https://wa.me/34600000000?text=${encodedText}`, '_blank');
+    }
+  };
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const { data } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', Number(id))
+        .single();
+      setProduct(data);
+      setLoading(false);
+    };
+    fetchProduct();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="pt-40 pb-24 flex justify-center">
+        <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -45,7 +110,64 @@ const ProductDetail = () => {
               <Star size={14} fill="currentColor" /> Producto Destacado
             </div>
             <h1 className="text-5xl md:text-6xl font-display font-bold text-secondary mb-6">{product.name}</h1>
-            <div className="text-4xl font-bold text-secondary mb-10">{product.price}€</div>
+            <div className="text-4xl font-bold text-secondary mb-10">
+              {getFinalPrice() > 0 ? `${getFinalPrice().toFixed(2)}€` : `${Number(product.price).toFixed(0)}€`}
+            </div>
+
+            {/* Price Selection */}
+            {(product.price_options && product.price_options.length > 0 || product.allow_custom_price) && (
+              <div className="mb-10 space-y-6">
+                <h3 className="text-sm font-bold text-secondary uppercase tracking-widest">Selecciona una opción</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Default Price if no options but custom allowed? Or just show options */}
+                  {product.price_options?.map((option, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedOption(idx)}
+                      className={`p-4 rounded-2xl border-2 text-left transition-all ${
+                        selectedOption === idx 
+                          ? 'border-primary bg-primary-light/30' 
+                          : 'border-gray-100 hover:border-gray-200'
+                      }`}
+                    >
+                      <div className="text-xs font-bold text-primary uppercase mb-1">{option.label}</div>
+                      <div className="text-lg font-bold text-secondary">{option.price.toFixed(2)}€</div>
+                    </button>
+                  ))}
+                  
+                  {product.allow_custom_price && (
+                    <button
+                      onClick={() => setSelectedOption('custom')}
+                      className={`p-4 rounded-2xl border-2 text-left transition-all ${
+                        selectedOption === 'custom' 
+                          ? 'border-primary bg-primary-light/30' 
+                          : 'border-gray-100 hover:border-gray-200'
+                      }`}
+                    >
+                      <div className="text-xs font-bold text-primary uppercase mb-1">Personalizado</div>
+                      <div className="text-lg font-bold text-secondary">Elige tu precio</div>
+                    </button>
+                  )}
+                </div>
+
+                {selectedOption === 'custom' && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="space-y-2"
+                  >
+                    <label className="text-xs font-bold text-gray-400 uppercase ml-1">Escribe tu presupuesto (€)</label>
+                    <input
+                      type="number"
+                      value={customPrice}
+                      onChange={(e) => setCustomPrice(e.target.value)}
+                      placeholder="Ej: 50.00"
+                      className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-primary-light rounded-2xl outline-none transition-all font-bold text-lg"
+                    />
+                  </motion.div>
+                )}
+              </div>
+            )}
             
             <p className="text-xl text-gray-500 leading-relaxed mb-12">
               {product.description} Nuestra selección premium garantiza que cada flor llegue en su punto óptimo de frescura y belleza.
@@ -72,12 +194,34 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-6">
-              <button className="flex-grow bg-secondary text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-black transition-all hover:scale-[1.02] shadow-xl">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button 
+                onClick={handleBuyNow}
+                disabled={selectedOption === 'custom' && !customPrice}
+                className="flex-grow bg-secondary text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-black transition-all hover:scale-[1.02] shadow-xl disabled:opacity-50"
+              >
                 Encargar ahora
               </button>
-              <button className="px-10 py-5 rounded-2xl border-2 border-secondary font-bold text-secondary hover:bg-secondary hover:text-white transition-all flex items-center justify-center gap-3">
-                <ClipboardCheck size={20} /> Añadir al encargo
+              <button 
+                onClick={handleAdd}
+                disabled={selectedOption === 'custom' && !customPrice}
+                className={`px-8 py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all ${
+                  added 
+                    ? 'bg-primary text-white border-2 border-primary scale-[1.02] shadow-xl' 
+                    : 'border-2 border-secondary text-secondary hover:bg-secondary hover:text-white'
+                } disabled:opacity-50`}
+              >
+                {added ? (
+                  <>
+                    <Check size={20} />
+                    ¡Añadido!
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag size={20} />
+                    Añadir al encargo
+                  </>
+                )}
               </button>
             </div>
 
