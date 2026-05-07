@@ -30,10 +30,18 @@ const ProductDetail = () => {
     return '';
   };
 
+  const isPriceValid = () => {
+    if (selectedOption !== 'custom') return true;
+    const price = parseFloat(customPrice);
+    if (isNaN(price)) return false;
+    if (product?.min_custom_price && price < product.min_custom_price) return false;
+    if (product?.max_custom_price && price > product.max_custom_price) return false;
+    return price > 0;
+  };
+
   const handleAdd = () => {
-    if (product) {
+    if (product && isPriceValid()) {
       const price = getFinalPrice();
-      if (price <= 0) return;
       addToCart(product, price, getFinalLabel());
       setAdded(true);
       setTimeout(() => setAdded(false), 2000);
@@ -41,9 +49,8 @@ const ProductDetail = () => {
   };
 
   const handleBuyNow = () => {
-    if (product) {
+    if (product && isPriceValid()) {
       const price = getFinalPrice();
-      if (price <= 0) return;
       const label = getFinalLabel();
       const text = `¡Hola! Me gustaría encargar este producto directamente:\n\n- 1x ${product.name} ${label ? `(${label})` : ''} - ${price.toFixed(2)}€\n\n*Total estimado: ${price.toFixed(2)}€*`;
       const encodedText = encodeURIComponent(text);
@@ -154,16 +161,39 @@ const ProductDetail = () => {
                   <motion.div 
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="space-y-2"
+                    className="space-y-4"
                   >
-                    <label className="text-xs font-bold text-gray-400 uppercase ml-1">Escribe tu presupuesto (€)</label>
-                    <input
-                      type="number"
-                      value={customPrice}
-                      onChange={(e) => setCustomPrice(e.target.value)}
-                      placeholder="Ej: 50.00"
-                      className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-primary-light rounded-2xl outline-none transition-all font-bold text-lg"
-                    />
+                    <div className="bg-primary/5 p-4 rounded-2xl border border-primary/10">
+                      <p className="text-sm text-secondary font-medium">
+                        ✨ ¡Tú pones el presupuesto! Diseñaremos algo especial ajustado a lo que indiques.
+                      </p>
+                      {(product.min_custom_price || product.max_custom_price) && (
+                        <p className="text-xs text-primary font-bold mt-2 uppercase tracking-tight flex gap-3">
+                          {product.min_custom_price && <span>Mínimo: {product.min_custom_price}€</span>}
+                          {product.max_custom_price && <span>Máximo: {product.max_custom_price}€</span>}
+                        </p>
+                      )}
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 uppercase ml-1">Escribe tu presupuesto (€)</label>
+                      <input
+                        type="number"
+                        value={customPrice}
+                        onChange={(e) => setCustomPrice(e.target.value)}
+                        placeholder="Ej: 50.00"
+                        className={`w-full px-6 py-4 bg-gray-50 border-2 rounded-2xl outline-none transition-all font-bold text-lg ${
+                          customPrice && !isPriceValid() 
+                            ? 'border-red-200 focus:border-red-400 text-red-500' 
+                            : 'border-transparent focus:border-primary-light text-secondary'
+                        }`}
+                      />
+                      {customPrice && !isPriceValid() && (
+                        <p className="text-xs text-red-500 font-bold ml-1 animate-pulse">
+                          El precio debe estar dentro de los límites permitidos.
+                        </p>
+                      )}
+                    </div>
                   </motion.div>
                 )}
               </div>
@@ -197,15 +227,15 @@ const ProductDetail = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <button 
                 onClick={handleBuyNow}
-                disabled={selectedOption === 'custom' && !customPrice}
-                className="flex-grow bg-secondary text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-black transition-all hover:scale-[1.02] shadow-xl disabled:opacity-50"
+                disabled={!isPriceValid() || (selectedOption === 'custom' && !customPrice)}
+                className="flex-grow bg-secondary text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-black transition-all hover:scale-[1.02] shadow-xl disabled:opacity-50 disabled:grayscale"
               >
                 Encargar ahora
               </button>
               <button 
                 onClick={handleAdd}
-                disabled={selectedOption === 'custom' && !customPrice}
-                className={`px-8 py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all ${
+                disabled={!isPriceValid() || (selectedOption === 'custom' && !customPrice)}
+                className={`px-8 py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all disabled:opacity-50 ${
                   added 
                     ? 'bg-primary text-white border-2 border-primary scale-[1.02] shadow-xl' 
                     : 'border-2 border-secondary text-secondary hover:bg-secondary hover:text-white'

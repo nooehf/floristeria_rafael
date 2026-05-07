@@ -27,6 +27,8 @@ export interface Product {
   categories?: { name: string };
   price_options?: PriceOption[];
   allow_custom_price?: boolean;
+  min_custom_price?: number;
+  max_custom_price?: number;
   created_at?: string;
 }
 

@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { supabase, type Product, type Category } from '../lib/supabase';
 
-const emptyProduct = { name: '', description: '', price: 0, image: '', category_id: undefined, price_options: [], allow_custom_price: false };
+const emptyProduct = { name: '', description: '', price: 0, image: '', category_id: undefined, price_options: [], allow_custom_price: false, min_custom_price: undefined, max_custom_price: undefined };
 const emptyCategory = { name: '', slug: '' };
 
 const AdminDashboard = () => {
@@ -146,6 +146,8 @@ const AdminDashboard = () => {
           category_id: editingProduct.category_id,
           price_options: editingProduct.price_options || [],
           allow_custom_price: editingProduct.allow_custom_price || false,
+          min_custom_price: editingProduct.min_custom_price,
+          max_custom_price: editingProduct.max_custom_price,
         })
         .eq('id', editingProduct.id);
 
@@ -173,6 +175,8 @@ const AdminDashboard = () => {
           category_id: editingProduct.category_id,
           price_options: editingProduct.price_options || [],
           allow_custom_price: editingProduct.allow_custom_price || false,
+          min_custom_price: editingProduct.min_custom_price,
+          max_custom_price: editingProduct.max_custom_price,
         });
 
       if (error) {
@@ -654,6 +658,33 @@ const AdminDashboard = () => {
                       <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${editingProduct.allow_custom_price ? 'left-7' : 'left-1'}`} />
                     </button>
                   </div>
+
+                  {editingProduct.allow_custom_price && (
+                    <div className="grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-2">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-gray-400 uppercase">Mínimo (€)</label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={editingProduct.min_custom_price || ''}
+                          onChange={(e) => setEditingProduct({ ...editingProduct, min_custom_price: parseFloat(e.target.value) || 0 })}
+                          placeholder="Sin mínimo"
+                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-gray-400 uppercase">Máximo (€)</label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={editingProduct.max_custom_price || ''}
+                          onChange={(e) => setEditingProduct({ ...editingProduct, max_custom_price: parseFloat(e.target.value) || 0 })}
+                          placeholder="Sin máximo"
+                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
