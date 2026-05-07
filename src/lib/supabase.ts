@@ -30,6 +30,7 @@ export interface Product {
   price_label?: string;
   min_custom_price?: number;
   max_custom_price?: number;
+  images?: string[];
   created_at?: string;
 }
 

@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { supabase, type Product, type Category } from '../lib/supabase';
 
-const emptyProduct = { name: '', description: '', price: 0, price_label: 'Estándar', image: '', category_id: undefined, price_options: [], allow_custom_price: false, min_custom_price: undefined, max_custom_price: undefined };
+const emptyProduct = { name: '', description: '', price: 0, price_label: 'Estándar', image: '', images: [], category_id: undefined, price_options: [], allow_custom_price: false, min_custom_price: undefined, max_custom_price: undefined };
 const emptyCategory = { name: '', slug: '' };
 
 const AdminDashboard = () => {
@@ -90,13 +90,12 @@ const AdminDashboard = () => {
     setShowModal(false);
     setEditingProduct(null);
   };
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, isGallery = false) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     if (file.size > 200 * 1024) {
-      showToast('La imagen supera el límite de 200KB', 'error');
+      showToast('La imagen supera los 200KB', 'error');
       return;
     }
 
@@ -118,9 +117,24 @@ const AdminDashboard = () => {
       .from('product-images')
       .getPublicUrl(fileName);
 
-    setEditingProduct(prev => prev ? { ...prev, image: publicUrl } : prev);
+    if (isGallery) {
+      setEditingProduct(prev => prev ? { ...prev, images: [...(prev.images || []), publicUrl] } : prev);
+    } else {
+      setEditingProduct(prev => prev ? { ...prev, image: publicUrl } : prev);
+    }
+    
     setUploadingImage(false);
     showToast('Imagen subida correctamente', 'success');
+  };
+
+  const removeGalleryImage = (url: string) => {
+    setEditingProduct(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        images: (prev.images || []).filter(img => img !== url)
+      };
+    });
   };
 
   const handleSave = async () => {
@@ -144,6 +158,7 @@ const AdminDashboard = () => {
           price: editingProduct.price,
           price_label: editingProduct.price_label || 'Estándar',
           image: editingProduct.image,
+          images: editingProduct.images || [],
           category_id: editingProduct.category_id,
           price_options: editingProduct.price_options || [],
           allow_custom_price: editingProduct.allow_custom_price || false,
@@ -174,6 +189,7 @@ const AdminDashboard = () => {
           price: editingProduct.price,
           price_label: editingProduct.price_label || 'Estándar',
           image: editingProduct.image,
+          images: editingProduct.images || [],
           category_id: editingProduct.category_id,
           price_options: editingProduct.price_options || [],
           allow_custom_price: editingProduct.allow_custom_price || false,
@@ -528,12 +544,12 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-bold text-gray-700 block">Imagen (Max 200KB)</label>
+                  <label className="text-sm font-bold text-gray-700 block">Imagen Principal (Max 200KB)</label>
                   <div className="relative">
                     <input
                       type="file"
                       accept="image/*"
-                      onChange={handleImageUpload}
+                      onChange={(e) => handleImageUpload(e, false)}
                       disabled={uploadingImage}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
                     />
@@ -544,9 +560,43 @@ const AdminDashboard = () => {
                         <Upload size={18} className="text-gray-400" />
                       )}
                       <span className="text-sm text-gray-500">
-                        {uploadingImage ? 'Subiendo imagen...' : editingProduct.image ? 'Cambiar imagen' : 'Seleccionar imagen'}
+                        {uploadingImage ? 'Subiendo imagen...' : editingProduct.image ? 'Cambiar imagen principal' : 'Seleccionar imagen principal'}
                       </span>
                     </div>
+                  </div>
+                  {editingProduct.image && (
+                    <div className="mt-2 w-20 h-20 rounded-lg overflow-hidden border border-gray-100">
+                      <img src={editingProduct.image} alt="Principal" className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-1.5 pt-2">
+                  <label className="text-sm font-bold text-gray-700 block">Galería de fotos (Opcional)</label>
+                  <div className="flex flex-wrap gap-3">
+                    {editingProduct.images?.map((url, idx) => (
+                      <div key={idx} className="relative w-20 h-20 rounded-xl overflow-hidden border border-gray-100 group">
+                        <img src={url} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
+                        <button 
+                          onClick={() => removeGalleryImage(url)}
+                          className="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    ))}
+                    <label className="w-20 h-20 rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 hover:border-primary hover:text-primary transition-all cursor-pointer">
+                      <Plus size={20} />
+                      <span className="text-[10px] font-bold mt-1 uppercase">Añadir</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => handleImageUpload(e, true)}
+                        disabled={uploadingImage}
+                        className="hidden"
+                      />
+                    </label>
                   </div>
                 </div>
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Check, Star, ShoppingBag } from 'lucide-react';
 import { supabase, type Product } from '../lib/supabase';
 import { useCart } from '../context/CartContext';
@@ -10,6 +10,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [added, setAdded] = useState(false);
+  const [activeImage, setActiveImage] = useState<string>('');
   const [selectedOption, setSelectedOption] = useState<number | 'custom' | null>(null);
   const [customPrice, setCustomPrice] = useState<string>('');
   const { addToCart } = useCart();
@@ -66,6 +67,7 @@ const ProductDetail = () => {
         .eq('id', Number(id))
         .single();
       setProduct(data);
+      if (data?.image) setActiveImage(data.image);
       setLoading(false);
     };
     fetchProduct();
@@ -102,9 +104,41 @@ const ProductDetail = () => {
             animate={{ opacity: 1, x: 0 }}
             className="space-y-6"
           >
-            <div className="aspect-[4/5] overflow-hidden rounded-[3rem] bg-gray-50 shadow-2xl">
-              <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+            <div className="aspect-[4/5] overflow-hidden rounded-[3rem] bg-gray-50 shadow-2xl relative">
+              <AnimatePresence mode="wait">
+                <motion.img 
+                  key={activeImage}
+                  src={activeImage} 
+                  alt={product.name} 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-full h-full object-cover" 
+                />
+              </AnimatePresence>
             </div>
+
+            {/* Thumbnails */}
+            {product.images && product.images.length > 0 && (
+              <div className="flex gap-4 overflow-x-auto py-2 no-scrollbar">
+                <button 
+                  onClick={() => setActiveImage(product.image)}
+                  className={`relative flex-shrink-0 w-24 aspect-square rounded-2xl overflow-hidden border-2 transition-all ${activeImage === product.image ? 'border-primary' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                >
+                  <img src={product.image} alt="Main" className="w-full h-full object-cover" />
+                </button>
+                {product.images.map((url, idx) => (
+                  <button 
+                    key={idx}
+                    onClick={() => setActiveImage(url)}
+                    className={`relative flex-shrink-0 w-24 aspect-square rounded-2xl overflow-hidden border-2 transition-all ${activeImage === url ? 'border-primary' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                  >
+                    <img src={url} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </motion.div>
 
           {/* Info Side */}
