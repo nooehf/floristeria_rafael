@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { supabase, type Product, type Category } from '../lib/supabase';
 
-const emptyProduct = { name: '', description: '', price: 0, image: '', category_id: undefined, price_options: [], allow_custom_price: false, min_custom_price: undefined, max_custom_price: undefined };
+const emptyProduct = { name: '', description: '', price: 0, price_label: 'Estándar', image: '', category_id: undefined, price_options: [], allow_custom_price: false, min_custom_price: undefined, max_custom_price: undefined };
 const emptyCategory = { name: '', slug: '' };
 
 const AdminDashboard = () => {
@@ -142,6 +142,7 @@ const AdminDashboard = () => {
           name: editingProduct.name,
           description: editingProduct.description,
           price: editingProduct.price,
+          price_label: editingProduct.price_label || 'Estándar',
           image: editingProduct.image,
           category_id: editingProduct.category_id,
           price_options: editingProduct.price_options || [],
@@ -171,6 +172,7 @@ const AdminDashboard = () => {
           name: editingProduct.name,
           description: editingProduct.description,
           price: editingProduct.price,
+          price_label: editingProduct.price_label || 'Estándar',
           image: editingProduct.image,
           category_id: editingProduct.category_id,
           price_options: editingProduct.price_options || [],
@@ -565,7 +567,17 @@ const AdminDashboard = () => {
                     <h3 className="text-sm font-bold text-secondary uppercase tracking-widest">Configuración de Precios</h3>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="text-sm font-bold text-gray-700">Etiqueta Base</label>
+                      <input
+                        type="text"
+                        value={editingProduct.price_label || ''}
+                        onChange={(e) => setEditingProduct({ ...editingProduct, price_label: e.target.value })}
+                        placeholder="Ej: Estándar"
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                      />
+                    </div>
                     <div className="space-y-1.5">
                       <label className="text-sm font-bold text-gray-700">Precio Base (€)</label>
                       <input
@@ -578,21 +590,22 @@ const AdminDashboard = () => {
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                       />
                     </div>
-                    <div className="flex items-end">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const currentOptions = editingProduct.price_options || [];
-                          setEditingProduct({
-                            ...editingProduct,
-                            price_options: [...currentOptions, { label: '', price: 0 }]
-                          });
-                        }}
-                        className="w-full h-[50px] border-2 border-dashed border-gray-200 rounded-xl text-xs font-bold text-gray-400 hover:border-primary hover:text-primary transition-all flex items-center justify-center gap-2"
-                      >
-                        <Plus size={16} /> Añadir variante
-                      </button>
-                    </div>
+                  </div>
+
+                  <div className="flex items-end">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const currentOptions = editingProduct.price_options || [];
+                        setEditingProduct({
+                          ...editingProduct,
+                          price_options: [...currentOptions, { label: '', price: 0 }]
+                        });
+                      }}
+                      className="w-full h-[50px] border-2 border-dashed border-gray-200 rounded-xl text-xs font-bold text-gray-400 hover:border-primary hover:text-primary transition-all flex items-center justify-center gap-2"
+                    >
+                      <Plus size={16} /> Añadir otra variante de precio
+                    </button>
                   </div>
 
                   {editingProduct.price_options && editingProduct.price_options.length > 0 && (

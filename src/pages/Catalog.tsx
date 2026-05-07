@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Plus } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Plus, Search, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase, type Product, type Category } from '../lib/supabase';
 import { useCart } from '../context/CartContext';
@@ -9,6 +9,7 @@ const Catalog = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
 
@@ -26,9 +27,12 @@ const Catalog = () => {
     fetchData();
   }, []);
 
-  const filteredProducts = selectedCategory 
-    ? products.filter(p => p.category_id === selectedCategory)
-    : products;
+  const filteredProducts = products.filter(p => {
+    const matchesCategory = selectedCategory ? p.category_id === selectedCategory : true;
+    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                         p.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <div className="pt-32 pb-24 bg-white">
@@ -46,6 +50,40 @@ const Catalog = () => {
             Frescura garantizada y entrega en el mismo día.
           </p>
         </header>
+
+        {/* Search Bar */}
+        <div className="max-w-2xl mx-auto mb-16 relative group px-4">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
+              <Search size={22} className="text-primary" />
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="¿Qué ramo buscas hoy?..."
+              className="w-full pl-16 pr-32 py-6 bg-primary/5 border-2 border-primary/10 rounded-[2.5rem] text-secondary placeholder-gray-400 focus:bg-white focus:border-primary focus:shadow-2xl focus:shadow-primary/10 outline-none transition-all duration-500 text-lg"
+            />
+            <div className="absolute right-3 inset-y-3 flex items-center">
+              <button className="h-full px-8 bg-secondary text-white rounded-full font-bold text-sm hover:bg-black transition-all shadow-lg hover:scale-105 active:scale-95">
+                Buscar
+              </button>
+            </div>
+            <AnimatePresence>
+              {searchQuery && (
+                <motion.button
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-32 inset-y-0 flex items-center text-gray-300 hover:text-red-400 transition-colors mr-4"
+                >
+                  <X size={20} />
+                </motion.button>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
 
         {/* Category Filters */}
         <div className="flex flex-wrap justify-center gap-3 mb-16 overflow-x-auto pb-4 no-scrollbar">
@@ -94,15 +132,21 @@ const Catalog = () => {
         ) : filteredProducts.length === 0 ? (
           <div className="py-24 text-center max-w-md mx-auto">
             <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Plus className="text-gray-300 rotate-45" size={32} />
+              <Search className="text-gray-300" size={32} />
             </div>
-            <h3 className="text-2xl font-display font-bold text-secondary mb-3">No hay productos aquí</h3>
-            <p className="text-gray-500 mb-8">Estamos preparando nuevas sorpresas para esta sección. ¡Vuelve pronto!</p>
+            <h3 className="text-2xl font-display font-bold text-secondary mb-3">
+              {searchQuery ? 'No hay resultados para tu búsqueda' : 'No hay productos aquí'}
+            </h3>
+            <p className="text-gray-500 mb-8">
+              {searchQuery 
+                ? 'Prueba con otras palabras clave o explora nuestras categorías.' 
+                : 'Estamos preparando nuevas sorpresas para esta sección. ¡Vuelve pronto!'}
+            </p>
             <button 
-              onClick={() => setSelectedCategory(null)}
+              onClick={() => { setSelectedCategory(null); setSearchQuery(''); }}
               className="text-primary font-bold hover:underline"
             >
-              Ver todo el catálogo
+              Restablecer filtros
             </button>
           </div>
         ) : (

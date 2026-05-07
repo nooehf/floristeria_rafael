@@ -27,7 +27,7 @@ const ProductDetail = () => {
     if (selectedOption !== null && product?.price_options?.[selectedOption as number]) {
       return product.price_options[selectedOption as number].label;
     }
-    return '';
+    return product?.price_label || 'Estándar';
   };
 
   const isPriceValid = () => {
@@ -124,9 +124,23 @@ const ProductDetail = () => {
             {/* Price Selection */}
             {(product.price_options && product.price_options.length > 0 || product.allow_custom_price) && (
               <div className="mb-10 space-y-6">
-                <h3 className="text-sm font-bold text-secondary uppercase tracking-widest">Selecciona una opción</h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-secondary uppercase tracking-widest">Selecciona una opción</h3>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Default Price if no options but custom allowed? Or just show options */}
+                  {/* Base Price Option */}
+                  <button
+                    onClick={() => setSelectedOption(null)}
+                    className={`p-4 rounded-2xl border-2 text-left transition-all ${
+                      selectedOption === null 
+                        ? 'border-primary bg-primary-light/30' 
+                        : 'border-gray-100 hover:border-gray-200'
+                    }`}
+                  >
+                    <div className="text-xs font-bold text-primary uppercase mb-1">{product.price_label || 'Estándar'}</div>
+                    <div className="text-lg font-bold text-secondary">{Number(product.price).toFixed(2)}€</div>
+                  </button>
+
                   {product.price_options?.map((option, idx) => (
                     <button
                       key={idx}
@@ -156,7 +170,7 @@ const ProductDetail = () => {
                     </button>
                   )}
                 </div>
-
+                
                 {selectedOption === 'custom' && (
                   <motion.div 
                     initial={{ opacity: 0, y: -10 }}
