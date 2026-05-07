@@ -91,37 +91,58 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="pt-40 pb-24 bg-white">
-      <div className="container mx-auto px-6">
-        <Link to="/catalogo" className="inline-flex items-center gap-2 text-gray-400 hover:text-secondary mb-12 transition-colors">
-          <ArrowLeft size={20} /> Volver al catálogo
-        </Link>
+    <div className="pt-32 md:pt-40 pb-24 bg-white">
+      <div className="container mx-auto px-0 md:px-6">
+        <div className="px-6 md:px-0">
+          <Link to="/catalogo" className="inline-flex items-center gap-2 text-gray-400 hover:text-secondary mb-8 transition-colors">
+            <ArrowLeft size={20} /> Volver al catálogo
+          </Link>
+        </div>
 
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Image Gallery */}
           <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
           >
-            <div className="aspect-[4/5] overflow-hidden rounded-[3rem] bg-gray-50 shadow-2xl relative">
-              <AnimatePresence mode="wait">
-                <motion.img 
-                  key={activeImage}
-                  src={activeImage} 
-                  alt={product.name} 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="w-full h-full object-cover" 
-                />
-              </AnimatePresence>
+            <div className="relative">
+              <div className="aspect-square md:aspect-[4/5] overflow-hidden md:rounded-[3rem] bg-gray-50 md:shadow-2xl relative">
+                <AnimatePresence mode="wait">
+                  <motion.img 
+                    key={activeImage}
+                    src={activeImage} 
+                    alt={product.name} 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="w-full h-full object-cover" 
+                  />
+                </AnimatePresence>
+              </div>
+
+              {/* Pagination Dots (Mobile) */}
+              {(product.images?.length || 0) > 0 && (
+                <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2 md:hidden">
+                  <button 
+                    onClick={() => setActiveImage(product.image)}
+                    className={`w-2 h-2 rounded-full transition-all ${activeImage === product.image ? 'bg-white w-6' : 'bg-white/50'}`} 
+                  />
+                  {product.images?.map((url, idx) => (
+                    <button 
+                      key={idx}
+                      onClick={() => setActiveImage(url)}
+                      className={`w-2 h-2 rounded-full transition-all ${activeImage === url ? 'bg-white w-6' : 'bg-white/50'}`} 
+                    />
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Thumbnails */}
+            {/* Thumbnails (Desktop) */}
             {product.images && product.images.length > 0 && (
-              <div className="flex gap-4 overflow-x-auto py-2 no-scrollbar">
+              <div className="hidden md:flex gap-4 overflow-x-auto py-2 no-scrollbar">
                 <button 
                   onClick={() => setActiveImage(product.image)}
                   className={`relative flex-shrink-0 w-24 aspect-square rounded-2xl overflow-hidden border-2 transition-all ${activeImage === product.image ? 'border-primary' : 'border-transparent opacity-60 hover:opacity-100'}`}
@@ -143,9 +164,9 @@ const ProductDetail = () => {
 
           {/* Info Side */}
           <motion.div 
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="py-6"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="px-6 md:px-0 py-6"
           >
             <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest mb-6">
               <Star size={14} fill="currentColor" /> Producto Destacado
@@ -157,21 +178,21 @@ const ProductDetail = () => {
 
             {/* Price Selection */}
             {(product.price_options && product.price_options.length > 0 || product.allow_custom_price) && (
-              <div className="mb-10 space-y-6">
+              <div className="mb-10 space-y-6 pt-10 border-t border-gray-100">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-secondary uppercase tracking-widest">Selecciona una opción</h3>
+                  <h3 className="text-sm font-bold text-secondary uppercase tracking-widest">Selecciona el tamaño</h3>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex overflow-x-auto no-scrollbar gap-4 pb-2">
                   {/* Base Price Option */}
                   <button
                     onClick={() => setSelectedOption(null)}
-                    className={`p-4 rounded-2xl border-2 text-left transition-all ${
+                    className={`flex-shrink-0 w-32 p-4 rounded-2xl border-2 text-center transition-all ${
                       selectedOption === null 
-                        ? 'border-primary bg-primary-light/30' 
+                        ? 'border-primary bg-primary-light/10' 
                         : 'border-gray-100 hover:border-gray-200'
                     }`}
                   >
-                    <div className="text-xs font-bold text-primary uppercase mb-1">{product.price_label || 'Estándar'}</div>
+                    <div className="text-[10px] font-bold text-primary uppercase mb-2">{product.price_label || 'Estándar'}</div>
                     <div className="text-lg font-bold text-secondary">{Number(product.price).toFixed(2)}€</div>
                   </button>
 
@@ -179,13 +200,13 @@ const ProductDetail = () => {
                     <button
                       key={idx}
                       onClick={() => setSelectedOption(idx)}
-                      className={`p-4 rounded-2xl border-2 text-left transition-all ${
+                      className={`flex-shrink-0 w-32 p-4 rounded-2xl border-2 text-center transition-all ${
                         selectedOption === idx 
-                          ? 'border-primary bg-primary-light/30' 
+                          ? 'border-primary bg-primary-light/10' 
                           : 'border-gray-100 hover:border-gray-200'
                       }`}
                     >
-                      <div className="text-xs font-bold text-primary uppercase mb-1">{option.label}</div>
+                      <div className="text-[10px] font-bold text-primary uppercase mb-2">{option.label}</div>
                       <div className="text-lg font-bold text-secondary">{option.price.toFixed(2)}€</div>
                     </button>
                   ))}
@@ -193,14 +214,14 @@ const ProductDetail = () => {
                   {product.allow_custom_price && (
                     <button
                       onClick={() => setSelectedOption('custom')}
-                      className={`p-4 rounded-2xl border-2 text-left transition-all ${
+                      className={`flex-shrink-0 w-32 p-4 rounded-2xl border-2 text-center transition-all ${
                         selectedOption === 'custom' 
-                          ? 'border-primary bg-primary-light/30' 
+                          ? 'border-primary bg-primary-light/10' 
                           : 'border-gray-100 hover:border-gray-200'
                       }`}
                     >
-                      <div className="text-xs font-bold text-primary uppercase mb-1">Personalizado</div>
-                      <div className="text-lg font-bold text-secondary">Elige tu precio</div>
+                      <div className="text-[10px] font-bold text-primary uppercase mb-2">Personalizado</div>
+                      <div className="text-xs font-bold text-secondary leading-tight mt-1">Elige tu presupuesto</div>
                     </button>
                   )}
                 </div>

@@ -635,7 +635,9 @@ const AdminDashboard = () => {
                         step="0.01"
                         min="0"
                         value={editingProduct.price || ''}
-                        onChange={(e) => setEditingProduct({ ...editingProduct, price: parseFloat(e.target.value) || 0 })}
+                        onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value === '' ? 0 : parseFloat(e.target.value) })}
+                        onWheel={(e) => (e.target as HTMLInputElement).blur()}
+                        onFocus={(e) => e.target.select()}
                         placeholder="0.00"
                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                       />
@@ -682,12 +684,14 @@ const AdminDashboard = () => {
                             <input
                               type="number"
                               step="0.01"
-                              value={option.price}
+                              value={option.price || ''}
                               onChange={(e) => {
                                 const newOptions = [...(editingProduct.price_options || [])];
-                                newOptions[idx].price = parseFloat(e.target.value) || 0;
+                                newOptions[idx].price = e.target.value === '' ? 0 : parseFloat(e.target.value);
                                 setEditingProduct({ ...editingProduct, price_options: newOptions });
                               }}
+                              onWheel={(e) => (e.target as HTMLInputElement).blur()}
+                              onFocus={(e) => e.target.select()}
                               placeholder="0.00"
                               className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary"
                             />
@@ -730,7 +734,9 @@ const AdminDashboard = () => {
                           type="number"
                           step="0.01"
                           value={editingProduct.min_custom_price || ''}
-                          onChange={(e) => setEditingProduct({ ...editingProduct, min_custom_price: parseFloat(e.target.value) || 0 })}
+                          onChange={(e) => setEditingProduct({ ...editingProduct, min_custom_price: e.target.value === '' ? 0 : parseFloat(e.target.value) })}
+                          onWheel={(e) => (e.target as HTMLInputElement).blur()}
+                          onFocus={(e) => e.target.select()}
                           placeholder="Sin mínimo"
                           className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary"
                         />
@@ -741,7 +747,9 @@ const AdminDashboard = () => {
                           type="number"
                           step="0.01"
                           value={editingProduct.max_custom_price || ''}
-                          onChange={(e) => setEditingProduct({ ...editingProduct, max_custom_price: parseFloat(e.target.value) || 0 })}
+                          onChange={(e) => setEditingProduct({ ...editingProduct, max_custom_price: e.target.value === '' ? 0 : parseFloat(e.target.value) })}
+                          onWheel={(e) => (e.target as HTMLInputElement).blur()}
+                          onFocus={(e) => e.target.select()}
                           placeholder="Sin máximo"
                           className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary"
                         />

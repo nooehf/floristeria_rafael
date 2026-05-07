@@ -35,7 +35,7 @@ const Catalog = () => {
   });
 
   return (
-    <div className="pt-32 pb-24 bg-white">
+    <div className="pt-40 md:pt-48 pb-24 bg-white">
       <div className="container mx-auto px-6">
         <header className="mb-20 text-center max-w-2xl mx-auto">
           <motion.h1 
@@ -86,12 +86,12 @@ const Catalog = () => {
         </div>
 
         {/* Category Filters */}
-        <div className="flex flex-wrap justify-center gap-3 mb-16 overflow-x-auto pb-4 no-scrollbar">
+        <div className="flex overflow-x-auto no-scrollbar gap-3 mb-10 pb-4 md:flex-wrap md:justify-center md:mb-16">
           <button
             onClick={() => setSelectedCategory(null)}
-            className={`whitespace-nowrap px-8 py-3 rounded-2xl font-bold text-sm transition-all duration-300 flex items-center gap-2 ${
+            className={`whitespace-nowrap px-6 md:px-8 py-2.5 md:py-3 rounded-xl md:rounded-2xl font-bold text-xs md:text-sm transition-all duration-300 flex items-center gap-2 ${
               selectedCategory === null 
-                ? 'bg-secondary text-white shadow-xl shadow-secondary/20 -translate-y-1' 
+                ? 'bg-secondary text-white shadow-xl shadow-secondary/20 -translate-y-0.5' 
                 : 'bg-gray-50 text-gray-400 hover:bg-gray-100'
             }`}
           >
@@ -109,9 +109,9 @@ const Catalog = () => {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`whitespace-nowrap px-8 py-3 rounded-2xl font-bold text-sm transition-all duration-300 flex items-center gap-2 ${
+                className={`whitespace-nowrap px-6 md:px-8 py-2.5 md:py-3 rounded-xl md:rounded-2xl font-bold text-xs md:text-sm transition-all duration-300 flex items-center gap-2 ${
                   selectedCategory === cat.id 
-                    ? 'bg-secondary text-white shadow-xl shadow-secondary/20 -translate-y-1' 
+                    ? 'bg-secondary text-white shadow-xl shadow-secondary/20 -translate-y-0.5' 
                     : 'bg-gray-50 text-gray-400 hover:bg-gray-100'
                 }`}
               >
@@ -150,7 +150,7 @@ const Catalog = () => {
             </button>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8 lg:gap-12">
             {filteredProducts.map((product, index) => (
               <motion.div 
                 key={product.id}
@@ -161,7 +161,7 @@ const Catalog = () => {
                 className="group"
               >
                 <Link to={`/producto/${product.id}`} className="block">
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-gray-100 mb-8">
+                  <div className="relative aspect-square md:aspect-[4/5] overflow-hidden rounded-2xl md:rounded-[2.5rem] bg-gray-100 mb-4 md:mb-8">
                     <img 
                       src={product.image} 
                       alt={product.name} 
@@ -172,17 +172,20 @@ const Catalog = () => {
                         e.preventDefault();
                         addToCart(product);
                       }}
-                      className="absolute bottom-6 right-6 w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg transform translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 hover:bg-secondary hover:text-white text-secondary group-hover:hover:text-white z-10"
+                      className="hidden md:flex absolute bottom-6 right-6 w-14 h-14 bg-white rounded-full items-center justify-center shadow-lg transform translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 hover:bg-secondary hover:text-white text-secondary group-hover:hover:text-white z-10"
                     >
                       <Plus size={24} />
                     </button>
                   </div>
-                  <div className="px-2">
-                    <div className="flex justify-between items-start mb-2">
-                      <h3 className="text-2xl font-display font-bold text-secondary group-hover:text-primary transition-colors">{product.name}</h3>
-                      <span className="text-xl font-bold text-secondary">{Number(product.price).toFixed(0)}€</span>
+                  <div className="px-1 md:px-2">
+                    <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-1 md:mb-2">
+                      <h3 className="text-sm md:text-2xl font-display font-bold text-secondary group-hover:text-primary transition-colors line-clamp-1">{product.name}</h3>
+                      <span className="text-xs md:text-xl font-bold text-secondary">
+                        {product.allow_custom_price && !product.price_options?.length ? 'Desde ' : ''}
+                        {Number(product.price).toFixed(0)}€
+                      </span>
                     </div>
-                    <p className="text-gray-500 text-sm line-clamp-2">{product.description}</p>
+                    <p className="text-gray-500 text-[10px] md:text-sm line-clamp-1 md:line-clamp-2">{product.description}</p>
                   </div>
                 </Link>
               </motion.div>
