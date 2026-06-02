@@ -151,7 +151,14 @@ function App() {
                 <div className="px-8 pb-8 flex justify-between items-end">
                   <div className="space-y-1">
                     <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary">Sevilla</h4>
-                    <p className="text-secondary text-sm font-medium">Calle de las Flores, 123</p>
+                    <a 
+                      href="https://maps.app.goo.gl/u7himKY8LL25s3VZ7" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-secondary text-sm font-medium hover:text-primary transition-colors"
+                    >
+                      C. Ventura de la Vega, 1
+                    </a>
                   </div>
                   <div className="flex gap-4">
                     <Instagram size={20} className="text-gray-400" />
@@ -189,7 +196,7 @@ function App() {
                   <span className="text-2xl font-display font-bold tracking-tight">Floristería Rafael</span>
                 </div>
                 <p className="text-gray-400 max-w-sm mb-8 leading-relaxed">
-                  Creamos arreglos únicos que cuentan historias. Calidad premium y atención al detalle en cada pétalo desde hace más de 40 años.
+                  Creamos ramos únicos que cuentan historias. Calidad premium y atención al detalle en cada pétalo desde hace más de 40 años.
                 </p>
                 <div className="flex gap-4">
                   <a href="#" className="w-10 h-10 border border-gray-700 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all">
@@ -217,7 +224,7 @@ function App() {
               <div>
                 <h4 className="text-lg font-bold mb-6">Horario</h4>
                 <ul className="space-y-4 text-gray-400">
-                  <li>Lunes - Viernes: 09:00 - 20:00</li>
+                  <li>Lunes - Viernes: 10:00 - 14:00 y 17:00 - 20:00</li>
                   <li>Sábado: 10:00 - 14:00</li>
                   <li>Domingo: Cerrado</li>
                 </ul>
@@ -236,7 +243,7 @@ function App() {
         {/* Floating WhatsApp Button */}
         {!isAdmin &&
         <a 
-          href="https://wa.me/34600000000" 
+          href="https://wa.me/34954638660" 
           target="_blank" 
           rel="noopener noreferrer"
           className="fixed bottom-8 right-8 z-[100] group"

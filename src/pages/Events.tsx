@@ -30,7 +30,7 @@ const EVENT_SERVICES = [
     quote: "La belleza natural de una flor comunica frescura, calidad y atención al detalle de tu marca.",
     features: [
       "Decoración floral para recepciones y salas de juntas",
-      "Arreglos de gran formato para banquetes y galas",
+      "Ramos de gran formato para banquetes y galas",
       "Diseños temáticos para lanzamientos de productos",
       "Suscripciones semanales de flores frescas para oficinas",
       "Logotipos corporativos integrados con elementos botánicos"

@@ -59,7 +59,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 8,
     name: "Composición Oasis",
-    description: "Arreglo tropical con aves del paraíso y verdes exóticos para un toque refrescante.",
+    description: "Ramo tropical con aves del paraíso y verdes exóticos para un toque refrescante.",
     price: 55,
     image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&q=80&w=800",
   }

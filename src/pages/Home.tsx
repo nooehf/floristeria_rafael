@@ -87,7 +87,7 @@ const Home = () => {
                   tu día a día.
                 </h1>
                 <p className="text-base md:text-xl text-gray-500 mb-8 md:mb-12 max-w-lg leading-relaxed">
-                  Floristería Rafael selecciona las flores más frescas y crea arreglos únicos con un toque contemporáneo y elegante.
+                  Floristería Rafael selecciona las flores más frescas y crea ramos únicos con un toque contemporáneo y elegante.
                 </p>
                 <div className="flex flex-wrap gap-4 md:gap-6">
                   <Link to="/catalogo" className="bg-secondary text-white px-8 md:px-10 py-4 md:py-5 rounded-full font-bold hover:bg-black transition-all hover:scale-105 shadow-xl flex items-center gap-3 text-sm md:text-base">
@@ -115,7 +115,7 @@ const Home = () => {
                 <span className="italic font-serif font-light text-primary">belleza</span> y el origen.
               </h2>
               <p className="text-gray-500 font-sans leading-relaxed text-sm md:text-base max-w-sm mt-4">
-                Cada flor que entra en nuestro taller en Sevilla es seleccionada personalmente por su frescura, carácter y procedencia, garantizando arreglos que respiran alma y naturaleza.
+                Cada flor que entra en nuestro taller en Sevilla es seleccionada personalmente por su frescura, carácter y procedencia, garantizando ramos que respiran alma y naturaleza.
               </p>
             </div>
 
@@ -157,7 +157,7 @@ const Home = () => {
           <div className="bg-white/75 backdrop-blur-md border border-white/40 rounded-[3rem] p-12 md:p-20 text-center space-y-8 shadow-lg shadow-black/[0.01]">
             <div className="w-12 h-px bg-primary/30 mx-auto"></div>
             <h2 className="text-4xl md:text-7xl font-serif font-light text-secondary leading-tight max-w-3xl mx-auto italic">
-              “Arreglos que dicen lo que las <br />
+              “Ramos que dicen lo que las <br />
               palabras no pueden”
             </h2>
             <p className="text-gray-500 max-w-md mx-auto font-sans leading-relaxed text-sm md:text-base">

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Phone, MapPin, Clock } from 'lucide-react';
 
 const Contact = () => {
   return (
@@ -24,7 +24,14 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="text-xl font-bold mb-2">Visítanos</h4>
-                  <p className="text-gray-500">Calle de las Flores, 123<br />41001 Sevilla, España</p>
+                  <a 
+                    href="https://maps.app.goo.gl/u7himKY8LL25s3VZ7" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-gray-500 hover:text-primary transition-colors block"
+                  >
+                    C. Ventura de la Vega, 1<br />41005 Sevilla, España
+                  </a>
                 </div>
               </div>
 
@@ -33,48 +40,42 @@ const Contact = () => {
                   <Phone size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold mb-2">Llámanos</h4>
-                  <p className="text-gray-500">+34 912 345 678<br />Atención personalizada</p>
+                  <h4 className="text-xl font-bold mb-2">Teléfono</h4>
+                  <p className="text-gray-500">+34 954 63 86 60<br />Tiene Whatsapp</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-6">
                 <div className="w-14 h-14 bg-pastel-mint rounded-2xl flex items-center justify-center text-primary flex-shrink-0">
-                  <Mail size={24} />
+                  <Clock size={24} />
                 </div>
                 <div>
-                  <h4 className="text-xl font-bold mb-2">Email</h4>
-                  <p className="text-gray-500">hola@floristeriarafael.com<br />Respuesta en menos de 24h</p>
+                  <h4 className="text-xl font-bold mb-2">Horario</h4>
+                  <p className="text-gray-500">
+                    Lunes - Viernes: 10:00 - 14:00 y 17:00 - 20:00<br />
+                    Sábados: 10:00 - 14:00<br />
+                    Domingos: Cerrado
+                  </p>
                 </div>
               </div>
+
             </div>
           </motion.div>
 
-          {/* Form Side */}
+          {/* Map Side */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white p-12 rounded-[3rem] shadow-2xl border border-gray-50"
+            className="w-full aspect-square lg:aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl border border-gray-100 bg-gray-50 relative group"
           >
-            <form className="space-y-8">
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="space-y-3">
-                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400 ml-1">Nombre</label>
-                  <input type="text" placeholder="Ej. Ana García" className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary-light transition-all" />
-                </div>
-                <div className="space-y-3">
-                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400 ml-1">Email</label>
-                  <input type="email" placeholder="ana@ejemplo.com" className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary-light transition-all" />
-                </div>
-              </div>
-              <div className="space-y-3">
-                <label className="text-xs font-bold uppercase tracking-widest text-gray-400 ml-1">Mensaje</label>
-                <textarea rows={5} placeholder="Cuéntanos qué necesitas..." className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary-light transition-all resize-none" />
-              </div>
-              <button className="w-full bg-secondary text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-black transition-all group">
-                Enviar mensaje <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-              </button>
-            </form>
+            <iframe
+              title="Ubicación Floristería Rafael"
+              src="https://maps.google.com/maps?q=Florister%C3%ADa%20Rafael,%20Calle%20Ventura%20de%20la%20Vega%201,%2041005%20Sevilla&t=&z=17&ie=UTF8&iwloc=&output=embed"
+              className="w-full h-full border-none"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </motion.div>
 
         </div>

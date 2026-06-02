@@ -24,7 +24,7 @@ const Cart = ({ isOpen, onClose }: CartProps) => {
     
     const text = `¡Hola! Me gustaría hacer el siguiente encargo:\n\n*DATOS DEL CLIENTE:*\n- Nombre: ${customerName}\n- Día de recogida: ${pickupDay}\n- Método de pago: ${paymentText}\n\n*PEDIDO:*\n${itemsList}\n\n*Total estimado: ${totalPrice.toFixed(2)}€*`;
     const encodedText = encodeURIComponent(text);
-    window.open(`https://wa.me/34600000000?text=${encodedText}`, '_blank');
+    window.open(`https://wa.me/34954638660?text=${encodedText}`, '_blank');
   };
 
   return (
