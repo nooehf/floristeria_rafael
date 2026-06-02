@@ -24,7 +24,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="text-xl font-bold mb-2">Visítanos</h4>
-                  <p className="text-gray-500">Calle de las Flores, 123<br />28001 Madrid, España</p>
+                  <p className="text-gray-500">Calle de las Flores, 123<br />41001 Sevilla, España</p>
                 </div>
               </div>
 

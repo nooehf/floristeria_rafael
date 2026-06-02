@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Flower2, LogOut, Plus, Pencil, Trash2, X, Save,
+  LogOut, Plus, Pencil, Trash2, X, Save,
   Package, AlertCircle, Check, ImageIcon, Loader2, Upload, Tag
 } from 'lucide-react';
 import { supabase, type Product, type Category } from '../lib/supabase';
@@ -269,9 +269,11 @@ const AdminDashboard = () => {
       <header className="bg-secondary text-white sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="bg-white/10 p-2 rounded-xl">
-              <Flower2 size={24} />
-            </div>
+            <img 
+              src="/logo.jpg" 
+              alt="Floristería Rafael" 
+              className="w-10 h-10 rounded-xl object-cover border border-white/20 bg-white"
+            />
             <div>
               <h1 className="text-lg font-display font-bold">Panel Admin</h1>
               <p className="text-gray-400 text-xs">Floristería Rafael</p>

@@ -1,6 +1,6 @@
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flower2, Menu, X, Instagram, Facebook, Phone, ShoppingBag } from 'lucide-react';
+import { Menu, X, Instagram, Facebook, Phone, ShoppingBag } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useCart } from './context/CartContext';
 import Cart from './components/Cart.tsx';
@@ -41,15 +41,17 @@ function App() {
         {!isAdmin && <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled || isMenuOpen ? 'bg-white shadow-sm py-4' : 'bg-transparent py-6'}`}>
           <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="bg-secondary p-2.5 rounded-2xl text-white group-hover:rotate-12 transition-transform duration-300">
-                <Flower2 size={26} />
-              </div>
+              <img 
+                src="/logo.jpg" 
+                alt="Floristería Rafael" 
+                className="w-12 h-12 rounded-2xl object-cover group-hover:rotate-12 transition-transform duration-300 border border-gray-100 shadow-sm bg-white"
+              />
               <div className="flex flex-col">
                 <span className="text-xl font-display font-bold tracking-tight text-secondary">
                   Floristería Rafael
                 </span>
                 <span className="text-[10px] uppercase tracking-[0.2em] text-primary font-bold -mt-1">
-                  Madrid • Since 1995
+                  Sevilla • desde 1984
                 </span>
               </div>
             </Link>
@@ -148,7 +150,7 @@ function App() {
                 {/* Mobile Footer Info Short */}
                 <div className="px-8 pb-8 flex justify-between items-end">
                   <div className="space-y-1">
-                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary">Madrid</h4>
+                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-primary">Sevilla</h4>
                     <p className="text-secondary text-sm font-medium">Calle de las Flores, 123</p>
                   </div>
                   <div className="flex gap-4">
@@ -179,11 +181,15 @@ function App() {
             <div className="grid md:grid-cols-4 gap-12 mb-16">
               <div className="col-span-2">
                 <div className="flex items-center gap-3 mb-6">
-                  <Flower2 size={32} className="text-primary-light" />
+                  <img 
+                    src="/logo.jpg" 
+                    alt="Floristería Rafael" 
+                    className="w-12 h-12 rounded-2xl object-cover border border-gray-800 shadow-sm bg-white"
+                  />
                   <span className="text-2xl font-display font-bold tracking-tight">Floristería Rafael</span>
                 </div>
                 <p className="text-gray-400 max-w-sm mb-8 leading-relaxed">
-                  Creamos arreglos únicos que cuentan historias. Calidad premium y atención al detalle en cada pétalo desde hace más de 25 años.
+                  Creamos arreglos únicos que cuentan historias. Calidad premium y atención al detalle en cada pétalo desde hace más de 40 años.
                 </p>
                 <div className="flex gap-4">
                   <a href="#" className="w-10 h-10 border border-gray-700 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all">

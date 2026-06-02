@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Flower2, Lock, Mail, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 const AdminLogin = () => {
@@ -57,9 +57,11 @@ const AdminLogin = () => {
               <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-white" />
             </div>
             <div className="relative z-10">
-              <div className="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Flower2 size={32} className="text-white" />
-              </div>
+              <img 
+                src="/logo.jpg" 
+                alt="Floristería Rafael" 
+                className="w-16 h-16 rounded-2xl object-cover border border-white/20 bg-white mx-auto mb-4"
+              />
               <h1 className="text-2xl font-display font-bold text-white">Panel de Administración</h1>
               <p className="text-gray-400 text-sm mt-2">Floristería Rafael</p>
             </div>
