@@ -66,7 +66,7 @@ const Home = () => {
         muted
         playsInline
         preload="auto"
-        className="fixed top-0 left-0 w-full h-full object-cover pointer-events-none z-0"
+        className="fixed top-0 left-0 w-full h-full object-cover object-right pointer-events-none z-0"
       />
       <div className="fixed inset-0 bg-[#f9fafb]/10 z-0 pointer-events-none" />
 
@@ -78,23 +78,24 @@ const Home = () => {
             <div className="max-w-3xl">
               <motion.div
                 style={{ opacity: textOpacity, y: textY }}
+                className="bg-white/20 backdrop-blur-[3px] p-6 md:p-0 rounded-[2.5rem] border border-white/20 md:border-none shadow-lg shadow-black/[0.005] md:shadow-none md:bg-transparent md:backdrop-blur-none"
               >
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-light text-primary font-bold text-xs uppercase tracking-widest mb-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-light text-primary font-bold text-xs uppercase tracking-widest mb-6 md:mb-8">
                   <Leaf size={14} /> Naturaleza en casa
                 </div>
-                <h1 className="text-6xl md:text-8xl font-display font-bold text-secondary leading-[1.1] mb-8">
+                <h1 className="text-4xl sm:text-6xl md:text-8xl font-display font-bold text-secondary leading-[1.1] mb-6 md:mb-8">
                   Belleza <br /> 
                   <span className="italic font-light">Natural</span> para <br />
                   tu día a día.
                 </h1>
-                <p className="text-xl text-gray-500 mb-12 max-w-lg leading-relaxed">
+                <p className="text-base md:text-xl text-gray-500 mb-8 md:mb-12 max-w-lg leading-relaxed">
                   Floristería Rafael selecciona las flores más frescas y crea arreglos únicos con un toque contemporáneo y elegante.
                 </p>
-                <div className="flex flex-wrap gap-6">
-                  <Link to="/catalogo" className="bg-secondary text-white px-10 py-5 rounded-full font-bold hover:bg-black transition-all hover:scale-105 shadow-xl flex items-center gap-3">
+                <div className="flex flex-wrap gap-4 md:gap-6">
+                  <Link to="/catalogo" className="bg-secondary text-white px-8 md:px-10 py-4 md:py-5 rounded-full font-bold hover:bg-black transition-all hover:scale-105 shadow-xl flex items-center gap-3 text-sm md:text-base">
                     Explorar Colección <ArrowRight size={20} />
                   </Link>
-                  <Link to="/contacto" className="px-10 py-5 rounded-full font-bold border-2 border-secondary text-secondary hover:bg-secondary hover:text-white transition-all">
+                  <Link to="/contacto" className="px-8 md:px-10 py-4 md:py-5 rounded-full font-bold border-2 border-secondary text-secondary hover:bg-secondary hover:text-white transition-all text-sm md:text-base">
                     Presupuesto Personalizado
                   </Link>
                 </div>
