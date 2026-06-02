@@ -119,7 +119,7 @@ const Events = () => {
               <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-display font-bold text-secondary leading-[1.05] tracking-tight">
                 El arte de <br />
                 hacer eterno lo <br />
-                <span className="text-primary italic font-light font-display">efímero</span>.
+                <span className="text-primary italic font-light font-serif">efímero</span>.
               </h1>
               <p className="text-lg md:text-xl text-gray-600 max-w-xl leading-relaxed font-sans">
                 En Floristería Rafael concebimos el diseño floral para eventos como una obra de arte viva. Vestimos vuestras celebraciones en Sevilla y alrededores con composiciones orgánicas, elegantes y cargadas de intención.
@@ -286,16 +286,14 @@ const Events = () => {
           <div className="h-0.5 w-16 bg-primary/30 mx-auto mt-6"></div>
         </header>
 
-        <div className="grid md:grid-cols-3 gap-12 lg:gap-16 relative">
-          <div className="hidden md:block absolute top-10 left-[15%] right-[15%] h-px bg-gray-200 -z-10"></div>
-          
+        <div className="grid md:grid-cols-3 gap-12 lg:gap-20">
           {PROCESS_STEPS.map((step, idx) => (
-            <div key={idx} className="space-y-6 text-center group">
-              <div className="w-20 h-20 bg-white border border-gray-100 rounded-[2rem] flex items-center justify-center text-primary font-display font-bold text-2xl shadow-md group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-500 mx-auto">
+            <div key={idx} className="space-y-6 group">
+              <span className="font-serif text-4xl md:text-5xl text-primary/80 font-light italic shrink-0 leading-none block border-b border-primary/10 pb-4">
                 {step.num}
-              </div>
-              <h3 className="text-2xl font-bold font-display text-secondary">{step.title}</h3>
-              <p className="text-gray-500 leading-relaxed font-sans text-sm max-w-sm mx-auto">
+              </span>
+              <h3 className="text-2xl md:text-3xl font-bold font-display text-secondary">{step.title}</h3>
+              <p className="text-gray-500 leading-relaxed font-sans text-sm md:text-base">
                 {step.description}
               </p>
             </div>

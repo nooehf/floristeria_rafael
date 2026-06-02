@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
-import { ArrowRight, Leaf, Shield, Heart } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
@@ -80,12 +80,10 @@ const Home = () => {
                 style={{ opacity: textOpacity, y: textY }}
                 className="bg-white/20 backdrop-blur-[3px] p-6 md:p-0 rounded-[2.5rem] border border-white/20 md:border-none shadow-lg shadow-black/[0.005] md:shadow-none md:bg-transparent md:backdrop-blur-none"
               >
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-light text-primary font-bold text-xs uppercase tracking-widest mb-6 md:mb-8">
-                  <Leaf size={14} /> Naturaleza en casa
-                </div>
+
                 <h1 className="text-4xl sm:text-6xl md:text-8xl font-display font-bold text-secondary leading-[1.1] mb-6 md:mb-8">
                   Belleza <br /> 
-                  <span className="italic font-light">Natural</span> para <br />
+                  <span className="font-serif italic font-light">Natural</span> para <br />
                   tu día a día.
                 </h1>
                 <p className="text-base md:text-xl text-gray-500 mb-8 md:mb-12 max-w-lg leading-relaxed">
@@ -105,79 +103,73 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Philosophy Section - White & Mint (Semi-transparent overlay) */}
-      <section className="py-32 bg-white/90 backdrop-blur-md relative z-10 border-t border-gray-100/50">
+      {/* Philosophy Section - Frosted Glass Editorial Layout */}
+      <section className="py-32 bg-white/70 backdrop-blur-md relative z-10 border-y border-white/30">
         <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-16">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="group"
-            >
-              <div className="w-16 h-16 bg-pastel-mint rounded-3xl flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-white transition-all duration-500">
-                <Leaf size={32} />
-              </div>
-              <h3 className="text-2xl font-display font-bold mb-4">Cultivo Local</h3>
-              <p className="text-gray-500 leading-relaxed font-sans text-sm">
-                Trabajamos con productores locales para garantizar la máxima frescura y sostenibilidad en cada ramo.
+          <div className="grid lg:grid-cols-12 gap-16 items-start">
+            {/* Left Column: Title & Text */}
+            <div className="lg:col-span-5 space-y-6">
+              <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Nuestra Filosofía</span>
+              <h2 className="text-4xl md:text-6xl font-display font-light text-secondary leading-[1.1]">
+                Compromiso con la <br />
+                <span className="italic font-serif font-light text-primary">belleza</span> y el origen.
+              </h2>
+              <p className="text-gray-500 font-sans leading-relaxed text-sm md:text-base max-w-sm mt-4">
+                Cada flor que entra en nuestro taller en Sevilla es seleccionada personalmente por su frescura, carácter y procedencia, garantizando arreglos que respiran alma y naturaleza.
               </p>
-            </motion.div>
+            </div>
 
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="group"
-            >
-              <div className="w-16 h-16 bg-pastel-mint rounded-3xl flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-white transition-all duration-500">
-                <Heart size={32} />
-              </div>
-              <h3 className="text-2xl font-display font-bold mb-4">Diseño con Pasión</h3>
-              <p className="text-gray-500 leading-relaxed font-sans text-sm">
-                Cada arreglo es una pieza de arte única, creada por expertos floristas con años de experiencia.
-              </p>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="group"
-            >
-              <div className="w-16 h-16 bg-pastel-mint rounded-3xl flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-white transition-all duration-500">
-                <Shield size={32} />
-              </div>
-              <h3 className="text-2xl font-display font-bold mb-4">Calidad Garantizada</h3>
-              <p className="text-gray-500 leading-relaxed font-sans text-sm">
-                Nos comprometemos con la durabilidad de nuestras flores. Si no estás satisfecho, lo arreglamos.
-              </p>
-            </motion.div>
+            {/* Right Column: Dynamic Editorial List */}
+            <div className="lg:col-span-7 space-y-12">
+              {[
+                {
+                  num: "01",
+                  title: "Cultivo Local",
+                  desc: "Colaboramos mano a mano con productores de cercanía para asegurar que cada flor se corte en su punto óptimo, manteniendo viva la frescura natural del campo."
+                },
+                {
+                  num: "02",
+                  title: "Diseño con Pasión",
+                  desc: "Concebimos la floristería como una disciplina artística. Cada composición es una escultura viva que juega con texturas, formas contemporáneas y gamas cromáticas sofisticadas."
+                },
+                {
+                  num: "03",
+                  title: "Calidad Garantizada",
+                  desc: "Nos obsesiona la durabilidad. Nos comprometemos con la frescura de nuestras flores y te acompañamos con asesoramiento sobre el cuidado botánico ideal."
+                }
+              ].map((pillar) => (
+                <div key={pillar.num} className="flex gap-8 items-start border-b border-secondary/5 pb-8 last:border-none last:pb-0">
+                  <span className="font-serif text-4xl md:text-5xl text-primary/80 font-light italic shrink-0 leading-none mt-1">{pillar.num}</span>
+                  <div className="space-y-2">
+                    <h3 className="text-2xl md:text-3xl font-bold font-display text-secondary">{pillar.title}</h3>
+                    <p className="text-gray-500 text-sm md:text-base leading-relaxed max-w-xl font-sans">{pillar.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Featured Banner - Black & Pastel Green (Semi-transparent overlay) */}
-      <section className="py-24 bg-[#e8f5e9]/95 backdrop-blur-md relative z-10">
-        <div className="container mx-auto px-6">
-          <div className="bg-secondary rounded-[4rem] overflow-hidden relative p-12 md:p-24 shadow-2xl">
-            <div className="absolute right-0 top-0 w-1/3 h-full opacity-20 pointer-events-none hidden lg:block">
-              <img 
-                src="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80&w=800" 
-                alt="Background" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="relative z-10 max-w-2xl text-white">
-              <h2 className="text-4xl md:text-6xl font-display font-bold mb-8">Arreglos que dicen lo que las palabras no pueden.</h2>
-              <p className="text-xl text-gray-400 mb-10 leading-relaxed font-sans">
-                Desde nacimientos hasta celebraciones de vida, estamos aquí para acompañarte en cada momento importante.
-              </p>
-              <button className="px-12 py-5 rounded-full bg-white text-secondary font-bold hover:scale-105 transition-all">
-                Ver servicios para eventos
-              </button>
+      {/* Featured Banner - Frosted Glass Typography Banner */}
+      <section className="py-32 bg-transparent relative z-10">
+        <div className="container mx-auto px-6 max-w-4xl">
+          <div className="bg-white/75 backdrop-blur-md border border-white/40 rounded-[3rem] p-12 md:p-20 text-center space-y-8 shadow-lg shadow-black/[0.01]">
+            <div className="w-12 h-px bg-primary/30 mx-auto"></div>
+            <h2 className="text-4xl md:text-7xl font-serif font-light text-secondary leading-tight max-w-3xl mx-auto italic">
+              “Arreglos que dicen lo que las <br />
+              palabras no pueden”
+            </h2>
+            <p className="text-gray-500 max-w-md mx-auto font-sans leading-relaxed text-sm md:text-base">
+              Desde nacimientos hasta celebraciones de vida, estamos aquí para acompañarte en cada momento importante de tu vida en Sevilla.
+            </p>
+            <div className="pt-4">
+              <Link 
+                to="/contacto" 
+                className="inline-flex items-center gap-3 bg-secondary text-white px-10 py-5 rounded-full font-bold hover:bg-black transition-all hover:scale-105 shadow-xl text-sm"
+              >
+                Diseñar un encargo personalizado <ArrowRight size={16} />
+              </Link>
             </div>
           </div>
         </div>
