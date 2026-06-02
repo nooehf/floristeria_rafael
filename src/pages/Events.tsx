@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Calendar, MapPin, Sparkles, Check, Send, Flower2 } from 'lucide-react';
+import { ArrowRight, MapPin, Sparkles, Check, Send, Flower2 } from 'lucide-react';
 
 const EVENT_SERVICES = [
   {
