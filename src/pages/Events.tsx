@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, MapPin, Sparkles, Check, Send, Flower2 } from 'lucide-react';
+import { ArrowRight, Sparkles, Check, Flower2 } from 'lucide-react';
 
 const EVENT_SERVICES = [
   {
@@ -81,26 +81,6 @@ const PROCESS_STEPS = [
 ];
 
 const Events = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    eventType: 'wedding',
-    location: '',
-    date: '',
-    message: ''
-  });
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
-
   return (
     <div className="pt-36 md:pt-44 pb-32 bg-[#fafbf7] overflow-hidden">
       {/* Hero Section */}
@@ -301,125 +281,40 @@ const Events = () => {
         </div>
       </section>
 
-      {/* Simplified, Single-Step Contact Form */}
-      <section id="contact-form" className="container mx-auto px-6 max-w-4xl">
-        <div className="bg-[#1a4d2e] rounded-[3.5rem] text-white overflow-hidden relative shadow-2xl">
-          <div className="absolute right-0 top-0 w-2/5 h-full opacity-5 pointer-events-none hidden md:block">
-            <img 
-              src="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80&w=800" 
-              alt="Decorative" 
-              className="w-full h-full object-cover"
-            />
+      {/* Contact Options */}
+      <section id="contact-form" className="container mx-auto px-6 max-w-3xl">
+        <div className="bg-white/80 border border-primary/10 rounded-[3rem] p-10 md:p-16 text-center space-y-8 shadow-sm">
+          <div className="space-y-4">
+            <span className="text-xs font-bold text-primary tracking-widest uppercase">Contacto para Eventos</span>
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-secondary">
+              Diseñemos tu espacio
+            </h2>
+            <div className="w-12 h-px bg-primary/20 mx-auto my-4"></div>
+            <p className="text-gray-500 font-sans text-base md:text-lg max-w-xl mx-auto leading-relaxed">
+              Ponte en contacto con nosotros directamente para empezar a planificar la decoración de tu gran día en Sevilla y alrededores.
+            </p>
           </div>
 
-          <div className="p-8 md:p-16 relative z-10">
-            <div className="max-w-2xl">
-              <span className="text-[10px] font-bold tracking-widest text-[#e8f5e9]/70 uppercase">Contacto para Eventos</span>
-              <h2 className="text-4xl md:text-5xl font-display font-bold mt-2 mb-4 leading-tight">
-                Diseñemos tu espacio
-              </h2>
-              <p className="text-[#e8f5e9]/80 font-sans mb-12">
-                Completa el formulario y nos pondremos en contacto contigo en menos de 24 horas para dar forma a tu propuesta floral.
-              </p>
-            </div>
+          <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a
+              href="https://wa.me/34954638660?text=Hola,%20me%20gustaría%20obtener%20información%20y%20presupuesto%20para%20un%20evento."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto border-2 border-primary text-primary px-8 py-4 rounded-full font-bold hover:bg-primary hover:text-white transition-all duration-300 flex items-center justify-center gap-2.5 text-sm"
+            >
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.067 2.877 1.215 3.076.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              Contactar por WhatsApp
+            </a>
 
-            {submitted ? (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="bg-white/5 backdrop-blur-md rounded-3xl p-8 md:p-12 text-center border border-white/10 space-y-6"
-              >
-                <div className="w-16 h-16 bg-[#e8f5e9]/10 rounded-full flex items-center justify-center mx-auto text-[#e8f5e9]">
-                  <Check size={32} />
-                </div>
-                <h3 className="text-2xl font-bold font-display">¡Consulta Recibida!</h3>
-                <p className="text-[#e8f5e9]/80 font-sans max-w-md mx-auto">
-                  Hemos guardado los detalles de tu consulta. Rafael o un miembro de nuestro equipo floral en Sevilla se pondrá en contacto contigo en las próximas 24 horas.
-                </p>
-                <button 
-                  onClick={() => setSubmitted(false)}
-                  className="text-white hover:underline text-sm font-bold pt-4"
-                >
-                  Enviar otra consulta
-                </button>
-              </motion.div>
-            ) : (
-              <form onSubmit={handleSubmit} className="bg-white/5 backdrop-blur-md rounded-3xl p-6 md:p-10 border border-white/10 space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase font-bold tracking-widest text-[#e8f5e9]/70">Nombre completo</label>
-                    <input 
-                      type="text" 
-                      name="name"
-                      required
-                      placeholder="Tu nombre" 
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-all text-white placeholder-white/35"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase font-bold tracking-widest text-[#e8f5e9]/70">Email de contacto</label>
-                    <input 
-                      type="email" 
-                      name="email"
-                      required
-                      placeholder="correo@ejemplo.com" 
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-all text-white placeholder-white/35"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase font-bold tracking-widest text-[#e8f5e9]/70">Tipo de Evento</label>
-                    <select
-                      name="eventType"
-                      value={formData.eventType}
-                      onChange={handleInputChange}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-all text-white appearance-none [&>option]:text-secondary"
-                    >
-                      <option value="wedding">Boda / Enlace</option>
-                      <option value="corporate">Evento Corporativo</option>
-                      <option value="social">Celebración Privada</option>
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase font-bold tracking-widest text-[#e8f5e9]/70">Lugar y Fecha del Evento</label>
-                    <div className="relative">
-                      <MapPin size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50" />
-                      <input 
-                        type="text" 
-                        name="location"
-                        placeholder="Ej. Octubre 2026, Sevilla" 
-                        value={formData.location}
-                        onChange={handleInputChange}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-sm focus:outline-none focus:border-white transition-all text-white placeholder-white/35"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2 md:col-span-2">
-                    <label className="text-[10px] uppercase font-bold tracking-widest text-[#e8f5e9]/70">Cuéntanos más sobre tu idea</label>
-                    <textarea 
-                      name="message"
-                      rows={4} 
-                      placeholder="Indícanos detalles sobre la escala del evento, paleta de colores preferida o cualquier idea que tengas en mente..." 
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-white transition-all text-white resize-none placeholder-white/35"
-                    />
-                  </div>
-                </div>
-
-                <div className="pt-4 flex justify-end">
-                  <button
-                    type="submit"
-                    className="bg-white text-primary font-bold px-10 py-3.5 rounded-xl hover:bg-[#e8f5e9] transition-all flex items-center gap-2 text-xs shadow-lg"
-                  >
-                    <Send size={14} /> Enviar Consulta
-                  </button>
-                </div>
-              </form>
-            )}
+            <Link
+              to="/contacto"
+              className="w-full sm:w-auto bg-secondary text-white px-8 py-4 rounded-full font-bold hover:bg-black transition-all duration-300 flex items-center justify-center gap-2.5 text-sm shadow-xl"
+            >
+              Contacto
+              <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
       </section>
