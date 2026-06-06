@@ -11,6 +11,8 @@ import Contact from './pages/Contact.tsx';
 import ProductDetail from './pages/ProductDetail.tsx';
 import AdminLogin from './pages/AdminLogin.tsx';
 import AdminDashboard from './pages/AdminDashboard.tsx';
+import Legal from './pages/Legal.tsx';
+
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -176,6 +178,7 @@ function App() {
             <Route path="/catalogo" element={<Catalog />} />
             <Route path="/eventos" element={<Events />} />
             <Route path="/contacto" element={<Contact />} />
+            <Route path="/legal" element={<Legal />} />
             <Route path="/producto/:id" element={<ProductDetail />} />
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
@@ -183,10 +186,10 @@ function App() {
         </main>
 
         {/* Footer - Elegant Black & White */}
-        {!isAdmin && <footer className="bg-secondary text-white pt-24 pb-12">
+        {!isAdmin && <footer className="relative z-10 bg-secondary text-white pt-24 pb-12">
           <div className="max-w-7xl mx-auto px-6">
-            <div className="grid md:grid-cols-4 gap-12 mb-16">
-              <div className="col-span-2">
+            <div className="grid md:grid-cols-12 gap-12 mb-16">
+              <div className="md:col-span-6 lg:col-span-5">
                 <div className="flex items-center gap-3 mb-6">
                   <img 
                     src="/logo.jpg" 
@@ -199,19 +202,24 @@ function App() {
                   Creamos ramos únicos que cuentan historias. Calidad premium y atención al detalle en cada pétalo desde hace más de 40 años.
                 </p>
                 <div className="flex gap-4">
-                  <a href="#" className="w-10 h-10 border border-gray-700 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                  <a 
+                    href="https://www.instagram.com/floristeria_rafael/?hl=es" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 border border-gray-700 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all"
+                  >
                     <Instagram size={18} />
                   </a>
-                  <a href="#" className="w-10 h-10 border border-gray-700 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all">
-                    <Facebook size={18} />
-                  </a>
-                  <a href="#" className="w-10 h-10 border border-gray-700 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                  <a 
+                    href="tel:+34954638660" 
+                    className="w-10 h-10 border border-gray-700 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all"
+                  >
                     <Phone size={18} />
                   </a>
                 </div>
               </div>
               
-              <div>
+              <div className="md:col-span-3 lg:col-span-2">
                 <h4 className="text-lg font-bold mb-6">Secciones</h4>
                 <ul className="space-y-4 text-gray-400">
                   <li><Link to="/" className="hover:text-white transition-colors">Inicio</Link></li>
@@ -221,7 +229,7 @@ function App() {
                 </ul>
               </div>
 
-              <div>
+              <div className="md:col-span-3 lg:col-span-2">
                 <h4 className="text-lg font-bold mb-6">Horario</h4>
                 <ul className="space-y-4 text-gray-400">
                   <li>Lunes - Viernes: 10:00 - 14:00 y 17:00 - 20:00</li>
@@ -229,13 +237,53 @@ function App() {
                   <li>Domingo: Cerrado</li>
                 </ul>
               </div>
+
+              <div className="md:col-span-12 lg:col-span-3">
+                <h4 className="text-lg font-bold mb-6">Ubicación</h4>
+                <p className="text-sm text-gray-400 mb-4 font-sans leading-relaxed">
+                  C. Ventura de la Vega, 1<br />
+                  41005 Sevilla, España
+                </p>
+                <div className="w-full h-32 rounded-2xl overflow-hidden border border-gray-800 shadow-inner bg-gray-900 relative group">
+                  <iframe
+                    title="Ubicación Footer"
+                    src="https://maps.google.com/maps?q=Florister%C3%ADa%20Rafael,%20Calle%20Ventura%20de%20la%20Vega%201,%2041005%20Sevilla&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                    className="w-full h-full border-none opacity-70 group-hover:opacity-100 transition-opacity"
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+                <a 
+                  href="https://maps.app.goo.gl/u7himKY8LL25s3VZ7" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-xs text-gray-400 hover:text-white transition-colors mt-2.5 inline-block underline underline-offset-2"
+                >
+                  Ver en Google Maps
+                </a>
+              </div>
             </div>
             
             <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-              <p>© {new Date().getFullYear()} Floristería Rafael. Todos los derechos reservados.</p>
+              <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+                <p>© {new Date().getFullYear()} Floristería Rafael. Todos los derechos reservados.</p>
+                <span className="hidden md:inline text-gray-700">•</span>
+                <p>
+                  Web desarrollada por{' '}
+                  <a 
+                    href="https://hidalgonoe.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="hover:text-white transition-colors underline decoration-gray-800 underline-offset-4"
+                  >
+                    hidalgonoe.com
+                  </a>
+                </p>
+              </div>
               <div className="flex gap-8">
-                <a href="#" className="hover:text-white transition-colors">Privacidad</a>
-                <a href="#" className="hover:text-white transition-colors">Cookies</a>
+                <Link to="/legal#privacidad" className="hover:text-white transition-colors">Privacidad</Link>
+                <Link to="/legal#cookies" className="hover:text-white transition-colors">Cookies</Link>
               </div>
             </div>
           </div>

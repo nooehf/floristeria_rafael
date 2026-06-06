@@ -84,7 +84,7 @@ const Home = () => {
             <div className="max-w-3xl">
               <motion.div
                 style={{ opacity: textOpacity, y: textY }}
-                className="bg-white/20 backdrop-blur-[3px] p-6 md:p-0 rounded-[2.5rem] border border-white/20 md:border-none shadow-lg shadow-black/[0.005] md:shadow-none md:bg-transparent md:backdrop-blur-none"
+                className="bg-white/80 backdrop-blur-lg p-8 md:p-0 rounded-[2.5rem] border border-white/45 shadow-xl shadow-secondary/5 md:shadow-none md:bg-transparent md:backdrop-blur-none md:border-none"
               >
 
                 <h1 className="text-4xl sm:text-6xl md:text-8xl font-display font-bold text-secondary leading-[1.1] mb-6 md:mb-8">
@@ -92,7 +92,7 @@ const Home = () => {
                   <span className="font-serif italic font-light">Natural</span> para <br />
                   tu día a día.
                 </h1>
-                <p className="text-base md:text-xl text-gray-500 mb-8 md:mb-12 max-w-lg leading-relaxed">
+                <p className="text-base md:text-xl text-secondary font-medium mb-8 md:mb-12 max-w-lg leading-relaxed [text-shadow:_0_2px_10px_rgba(255,255,255,0.8)]">
                   Floristería Rafael selecciona las flores más frescas y crea ramos únicos con un toque contemporáneo y elegante.
                 </p>
                 <div className="flex flex-wrap gap-4 md:gap-6">
