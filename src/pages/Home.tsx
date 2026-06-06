@@ -66,7 +66,13 @@ const Home = () => {
         muted
         playsInline
         preload="auto"
-        className="fixed top-0 left-0 w-full h-full object-cover object-right pointer-events-none z-0"
+        className="hidden md:block fixed top-0 left-0 w-full h-full object-cover object-right pointer-events-none z-0"
+      />
+      {/* Background Image for Mobile */}
+      <img
+        src="/fondomovilfl.jpeg"
+        alt="Fondo móvil"
+        className="block md:hidden fixed top-0 left-0 w-full h-full object-cover object-center pointer-events-none z-0"
       />
       <div className="fixed inset-0 bg-[#f9fafb]/10 z-0 pointer-events-none" />
 
