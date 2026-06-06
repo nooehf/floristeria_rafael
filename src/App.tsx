@@ -1,6 +1,6 @@
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Instagram, Facebook, Phone, ShoppingBag } from 'lucide-react';
+import { Menu, X, Instagram, Phone, ShoppingBag } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useCart } from './context/CartContext';
 import Cart from './components/Cart.tsx';
